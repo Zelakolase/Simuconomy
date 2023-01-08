@@ -1,5 +1,11 @@
-public class App {
+public class App extends Operation {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        Initalize(); // <- From GlobalENV class
+        for(int i = 0;i < Iterations; i++) {
+            Work();
+            Demand();
+            Revenue();
+            // We can monitor metrics here
+        }
     }
 }

@@ -1,6 +1,6 @@
 public class Init {
-    public static int NumberOfCompanies = 100;
-    public static int EmployeesPerCompany = 100;
+    public static int NumberOfCompanies = 5;
+    public static int EmployeesPerCompany = 5;
     public static double ProductAEnergyMultiplier = 10;
     public static double ProductBEnergyMultiplier = ProductAEnergyMultiplier * 2.75;
     public static int Iterations = 100;

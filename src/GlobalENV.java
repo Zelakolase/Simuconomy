@@ -28,7 +28,10 @@ public class GlobalENV extends Init {
                 TempEMP.FoodConsumptionFactor = R.nextDouble(LowestFoodConsumptionFactor, HighestFoodConsumptionFactor);
                 TempEMP.Salary = Salary;
                 TempEMP.Wealth = EmployeeWealth;
+                TempCMP.Employees.add(TempEMP);
             }
+            Companies.add(TempCMP);
         }
+
     }
 }

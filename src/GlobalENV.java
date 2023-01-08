@@ -3,6 +3,7 @@ import java.util.Random;
 
 public class GlobalENV extends Init {
     public static ArrayList<Company> Companies = new ArrayList<>();
+    public static OfferList offerList = new OfferList();
     public static double AverageProductAPrice = 0;
     public static double AverageProductBPrice = 0;
     static Random R = new Random();

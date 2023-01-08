@@ -26,4 +26,14 @@ public class OfferList {
         if(F.UnitsAvailable > HighestUnit) HighestUnit = F.UnitsAvailable;
         List.add(F);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder SB = new StringBuilder();
+        for(Offer F : List) {
+            SB.append(F);
+        }
+
+        return SB.toString();
+    }
 }

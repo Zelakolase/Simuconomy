@@ -32,6 +32,5 @@ public class GlobalENV extends Init {
             }
             Companies.add(TempCMP);
         }
-
     }
 }

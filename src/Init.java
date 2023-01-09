@@ -9,9 +9,9 @@ public class Init {
 
     // Initalized values, might change throughout the simulation
     public static double LowestPriceMultiplier = 0.8;
-    public static double HighestPriceMultiplier = 1.01;
+    public static double HighestPriceMultiplier = 1.05;
     public static double LowestGreedMultiplier = 0.2;
-    public static double HighestGreedMultiplier = 0.7; // Should NOT be higher than 1.0
+    public static double HighestGreedMultiplier = 0.75; // Should NOT be higher than 1.0
     public static double LowestAConsumptionFactor = 0.5;
     public static double HighestAConsumptionFactor = 0.65;
     public static double Energy = 100;

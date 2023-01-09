@@ -8,11 +8,12 @@ public class App extends Operation {
             Demand();
             Revenue();
             double var = 0;
+            double var2 = 0;
             for(Company C : Companies) {
-                //if(C.Salary < Salary) C.Salary = Salary; // Minimum wage
+                if(C.Salary < Salary) C.Salary = Salary; // Minimum wage
                 //var += (C.PreviousUnitsProduced * C.PreviousPrice);
                 for(int o = 0;o < C.Employees.size(); o++) {
-                    //var += C.Employees.get(o).Wealth;
+                    var2 += C.Employees.get(o).Wealth;
                 }
 
                 if(C.Employees.size() < EmployeesPerCompany) { // Preserving population, replacing dead ones
@@ -29,7 +30,7 @@ public class App extends Operation {
                 var += C.PriceMultiplier;
             }
             //System.out.println((var / NumberOfCompanies) / AverageProductAPrice);
-            System.out.println(var / (NumberOfCompanies));
+            System.out.println(var / NumberOfCompanies);
             //System.out.println(var / (NumberOfCompanies * EmployeesPerCompany));
             //System.out.println(var);
         }

@@ -1,5 +1,4 @@
 public class Employee {
-    public int ID;
     public double Wealth;
     public double Energy;
     public double FearFactor;

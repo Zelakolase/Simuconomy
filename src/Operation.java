@@ -47,14 +47,14 @@ public class Operation extends GlobalENV{
                 if(UnitsToPurchase / RawMaterials > 0.25) {
                     Entry<Double, Integer> RawMaterialPurchaseProcess = Purchase("A", UnitsToPurchase, C.Wealth);
                     C.RawMaterials += RawMaterialPurchaseProcess.getValue();
-                    C.Wealth += RawMaterialPurchaseProcess.getKey();
+                    C.Wealth -= RawMaterialPurchaseProcess.getKey();
                 }
             }
 
             for(Employee E : C.Employees) {
                 int UpdatedEnergy = 0;
                 if(E.Wealth > 0) {
-                    if(AverageProductAPrice * 20 < C.Salary) {
+                    if(AverageProductAPrice * 10 < C.Salary) {
                         Entry<Double, Integer> APurchase = Purchase("A", E.FoodConsumptionFactor * E.Salary);
                         E.Wealth -= APurchase.getKey();
                         E.Salary -= APurchase.getKey();
@@ -65,12 +65,13 @@ public class Operation extends GlobalENV{
                             E.Wealth -= BPurchase.getKey();
                             E.Salary -= BPurchase.getKey();
                             UpdatedEnergy += ProductBEnergyMultiplier * BPurchase.getValue();
-                            E.FearFactor -= R.nextDouble(0.10, 0.30);
+                            E.FearFactor -= R.nextDouble(0.02, 0.1);
                         }else {
                             E.FoodConsumptionFactor += (E.FoodConsumptionFactor * E.FearFactor);
                         }
                     } else {
-                        double tempWealthRatio = (1-((AverageProductAPrice * 20)/E.Wealth));
+                        double tempWealthRatio = ((AverageProductAPrice * 10) / E.Wealth);
+                        if(tempWealthRatio > 1) tempWealthRatio = 1;
                         Entry<Double, Integer> APurchase = Purchase("A", tempWealthRatio * E.Wealth);
                         E.Wealth -= APurchase.getKey();
                         E.Salary -= APurchase.getKey();
@@ -81,6 +82,8 @@ public class Operation extends GlobalENV{
                 
                 E.Energy = UpdatedEnergy;
                 if(E.FearFactor < 0) E.FearFactor = LowestFearFactor;
+                if(E.FoodConsumptionFactor > 1) E.FoodConsumptionFactor = 1;
+                if(E.FoodConsumptionFactor < 0) E.FoodConsumptionFactor = 0.25;
             }
         }
     }
@@ -88,16 +91,15 @@ public class Operation extends GlobalENV{
     public static void Revenue() {
         for(Company C : Companies) {
             OfferList.Offer F = offerList.List.get(C.ID);
-            boolean RPI = F.UnitsAvailable <= 0 ? true : false;
-            boolean RPD = (C.PreviousUnitsProduced > 0 && F.UnitsAvailable/C.PreviousUnitsProduced > 0.25) ? true : false;
+            boolean RPI = (F.UnitsAvailable <= 0 && C.PreviousUnitsProduced > 0) ? true : false; // Require Price Increment
+            boolean RPD = (C.PreviousUnitsProduced > 0 && F.UnitsAvailable/C.PreviousUnitsProduced > 0.25) ? true : false; // Require Price Decrement
             boolean TMP = false;
             F.UnitsAvailable = F.UnitsAvailable < 0 ? 0 : F.UnitsAvailable;
             double Revenue = (C.PreviousUnitsProduced - F.UnitsAvailable) * F.Price;
 
             while(Revenue < (C.Salary * EmployeesPerCompany)) {
-                RPI = true;
-                C.Salary -= (C.Salary * (C.GreedMultiplier/100));
                 Revenue += C.Wealth;
+                C.Salary -= (C.Salary * (C.GreedMultiplier/100));
                 TMP = true;
             }
 
@@ -107,18 +109,24 @@ public class Operation extends GlobalENV{
                 Revenue -= C.Salary;
             }
 
+            if(TMP) C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50);
+
             if(RPI) {
                 C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50);
-                if(R.nextDouble() < C.GreedMultiplier) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50));
+                if(R.nextDouble() < C.GreedMultiplier) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25));
             }else if(RPD) {
-                C.PriceMultiplier += R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50);
-                if(R.nextDouble() < 1-C.GreedMultiplier) C.Salary -= (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50));
-                else C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50));
+                C.PriceMultiplier -= R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50);
+                if(R.nextDouble() < 1-C.GreedMultiplier) C.Salary += (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/25));
+                else C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25));
             }
 
-            if(C.PriceMultiplier < 0) C.PriceMultiplier = 1;
-            if(TMP && Revenue > 0) C.Wealth += Revenue;
-            else if(!TMP && Revenue > 0) C.Wealth = Revenue;
+            if(C.PriceMultiplier < 0) C.PriceMultiplier = 0.75;
+            if(TMP) C.Wealth = Revenue;
+            else C.Wealth += Revenue;
+            if(C.PreviousUnitsProduced <= 0)  {
+                C.PreviousPrice = AverageProductAPrice;
+                C.PriceMultiplier = 1;
+            }
         }
     }
 

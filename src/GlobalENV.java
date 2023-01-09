@@ -22,7 +22,6 @@ public class GlobalENV extends Init {
             TempCMP.RawMaterials = RawMaterials;
             for(int j = 0; j < EmployeesPerCompany; j++) {
                 Employee TempEMP = new Employee();
-                TempEMP.ID = j;
                 TempEMP.Energy = Energy;
                 TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
                 TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);

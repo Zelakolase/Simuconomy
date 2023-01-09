@@ -12,8 +12,8 @@ public class GlobalENV extends Init {
             Company TempCMP = new Company();
             TempCMP.ID = i;
             TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
-            boolean isGoingToBeA = R.nextDouble(0, 1) <= AtoBCompanyRatio? true : false;
-            TempCMP.ProductName = isGoingToBeA? "A" : "B";
+            boolean isGoingToBeA = R.nextDouble() <= AtoBCompanyRatio? true : false;
+            TempCMP.ProductName = isGoingToBeA ? "A" : "B";
             TempCMP.PreviousPrice = isGoingToBeA? ProductAPrice : ProductBPrice;
             TempCMP.PreviousUnitsProduced = 0;
             TempCMP.Salary = Salary;
@@ -25,7 +25,7 @@ public class GlobalENV extends Init {
                 TempEMP.ID = j;
                 TempEMP.Energy = Energy;
                 TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
-                TempEMP.FoodConsumptionFactor = R.nextDouble(LowestFoodConsumptionFactor, HighestFoodConsumptionFactor);
+                TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
                 TempEMP.Salary = Salary;
                 TempEMP.Wealth = EmployeeWealth;
                 TempCMP.Employees.add(TempEMP);

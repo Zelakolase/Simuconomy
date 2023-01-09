@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class OfferList {
     public ArrayList<Offer> List = new ArrayList<>();
-    public static int HighestUnit = 0;
+    public int HighestUnit = 0;
 
     public static class Offer {
         public int CompanyID;
@@ -25,6 +25,11 @@ public class OfferList {
     public void add(Offer F) {
         if(F.UnitsAvailable > HighestUnit) HighestUnit = F.UnitsAvailable;
         List.add(F);
+    }
+
+    public void recalculate() {
+        HighestUnit = 0;
+        for(Offer F : List) if(F.UnitsAvailable > HighestUnit) HighestUnit = F.UnitsAvailable;
     }
 
     @Override

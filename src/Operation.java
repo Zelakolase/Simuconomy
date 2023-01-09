@@ -109,7 +109,7 @@ public class Operation extends GlobalENV{
             F.UnitsAvailable = F.UnitsAvailable < 0 ? 0 : F.UnitsAvailable;
             double Revenue = (C.PreviousUnitsProduced - F.UnitsAvailable) * F.Price;
 
-            while(Revenue < (C.Salary * EmployeesPerCompany)) {
+            while(Revenue < (C.Salary * C.Employees.size())) {
                 Revenue += C.Wealth;
                 C.Salary -= (C.Salary * (C.GreedMultiplier/100));
                 TMP = true;
@@ -138,6 +138,57 @@ public class Operation extends GlobalENV{
             if(C.PreviousUnitsProduced <= 0)  {
                 C.PreviousPrice = AverageProductAPrice;
                 C.PriceMultiplier = 1;
+            }
+
+            int deltaEmployees = C.Employees.size() - EmployeesPerCompany;
+            if(deltaEmployees > 0 && !(RPI || RPD)) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25));
+            else if(deltaEmployees < 0 && !(RPI || RPD)) C.Salary += (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/25));
+        }
+    }
+
+    public static void EmployeeTransfer() {
+        double medianSalary = 0; 
+        double[] allSalaries = new double[Companies.size()];
+        int Ind = 0;
+        for(Company C : Companies){ 
+            allSalaries[Ind] = C.Salary;
+            Ind++;
+        }
+
+        Arrays.sort(allSalaries);
+        if (allSalaries.length % 2 == 0) medianSalary = ((double)allSalaries[allSalaries.length/2] + (double)allSalaries[allSalaries.length/2 - 1])/2;
+        else medianSalary = (double) allSalaries[allSalaries.length/2];
+
+        Main: for(int i = 0; i < NumberOfCompanies / 10; i++) {
+            int fromCMPID = FindCompanyBySalaryRange(false, medianSalary);
+            int toCMPID = FindCompanyBySalaryRange(true, medianSalary);
+            Employee EMPtoTransfer = null;
+            if(fromCMPID == -1 || toCMPID == -1) break Main;
+
+            Inner: for(Company C : Companies) {
+                if(C.ID == fromCMPID && C.Employees.size() > 0) {
+                    int randIndex = R.nextInt(0, C.Employees.size());
+                    EMPtoTransfer = C.Employees.get(randIndex);
+                    C.Employees.remove(randIndex);
+                    break Inner;
+                }
+            }
+
+            Inner: for(Company C : Companies) {
+                if(C.ID == toCMPID) {
+                    if(EMPtoTransfer == null) {
+                        EMPtoTransfer = new Employee();
+                        EMPtoTransfer.Energy = Energy;
+                        EMPtoTransfer.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
+                        EMPtoTransfer.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+                        EMPtoTransfer.Salary = C.Salary;
+                        EMPtoTransfer.Wealth = EmployeeWealth;
+                    }else {
+                        EMPtoTransfer.Salary = C.Salary;
+                    }
+                    C.Employees.add(EMPtoTransfer);
+                    break Inner;
+                }
             }
         }
     }

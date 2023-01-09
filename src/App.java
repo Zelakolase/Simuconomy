@@ -5,13 +5,14 @@ public class App extends Operation {
             Work();
             Demand();
             Revenue();
+            EmployeeTransfer();
             double var = 0;
             for(Company C : Companies) {
-                if(C.Salary < Salary) C.Salary = Salary; // Minimum wage
-                var += C.PreviousUnitsProduced;
+               // if(C.Salary < LowestSalary) C.Salary = LowestSalary; // Minimum wage
+                var += C.Salary;
             }
-            
-            System.out.println(var);
+
+            System.out.println((var / NumberOfCompanies) / AverageProductAPrice);
         }
     }
 }

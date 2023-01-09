@@ -1,12 +1,15 @@
 import java.util.AbstractMap;
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 public class Operation extends GlobalENV{
     public static void Work() {
         offerList.List.clear();
-        int ACorps = 0;
         AverageProductAPrice = 0;
         AverageProductBPrice = 0;
+        double[] tempAPrices = new double[ACorps];
+        double[] tempBPrices = new double[NumberOfCompanies - ACorps];
+        int AInd = 0, BInd = 0;
         for(Company C : Companies) {
             int UnitsToProduce = 0;
             for(Employee E : C.Employees) {
@@ -19,12 +22,18 @@ public class Operation extends GlobalENV{
                 if(tempUnitsToProduce < UnitsToProduce) UnitsToProduce = tempUnitsToProduce;
                 if(UnitsToProduce < BDependencyOnA) UnitsToProduce = 0;
                 else C.RawMaterials -= (UnitsToProduce * BDependencyOnA);
-            }else ACorps++;
+            }
 
             C.PreviousUnitsProduced = UnitsToProduce;
             double Price = C.PreviousPrice * C.PriceMultiplier;
-            if(C.ProductName.equals("B")) AverageProductBPrice += Price;
-            else AverageProductAPrice += Price;
+            if(C.ProductName.equals("B")) { 
+                tempBPrices[BInd] = Price;
+                BInd++;
+            }
+            else { 
+                tempAPrices[AInd] = Price;
+                AInd++;
+            }
             C.PreviousPrice = Price;
 
             OfferList.Offer F = new OfferList.Offer();
@@ -35,9 +44,12 @@ public class Operation extends GlobalENV{
 
             offerList.add(F);
         }
-
-        AverageProductAPrice /= ACorps;
-        AverageProductBPrice /= (NumberOfCompanies - ACorps);
+        Arrays.sort(tempAPrices);
+        if (tempAPrices.length % 2 == 0) AverageProductAPrice = ((double)tempAPrices[tempAPrices.length/2] + (double)tempAPrices[tempAPrices.length/2 - 1])/2;
+        else AverageProductAPrice = (double) tempAPrices[tempAPrices.length/2];
+        Arrays.sort(tempBPrices);
+        if (tempBPrices.length % 2 == 0) AverageProductBPrice = ((double)tempBPrices[tempBPrices.length/2] + (double)tempBPrices[tempBPrices.length/2 - 1])/2;
+        else AverageProductBPrice = (double) tempBPrices[tempBPrices.length/2];
     }
 
     public static void Demand() {
@@ -70,7 +82,7 @@ public class Operation extends GlobalENV{
                             E.FoodConsumptionFactor += (E.FoodConsumptionFactor * E.FearFactor);
                         }
                     } else {
-                        double tempWealthRatio = ((AverageProductAPrice * 10) / E.Wealth);
+                        double tempWealthRatio = 1 - ((AverageProductAPrice * 10) / E.Wealth);
                         if(tempWealthRatio > 1) tempWealthRatio = 1;
                         Entry<Double, Integer> APurchase = Purchase("A", tempWealthRatio * E.Wealth);
                         E.Wealth -= APurchase.getKey();

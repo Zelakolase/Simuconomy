@@ -6,6 +6,7 @@ public class GlobalENV extends Init {
     public static OfferList offerList = new OfferList();
     public static double AverageProductAPrice = 0;
     public static double AverageProductBPrice = 0;
+    public static int ACorps = 0;
     static Random R = new Random();
     public static void Initalize() {
         for(int i = 0;i < NumberOfCompanies; i++) {
@@ -14,6 +15,7 @@ public class GlobalENV extends Init {
             TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
             boolean isGoingToBeA = R.nextDouble() <= AtoBCompanyRatio? true : false;
             TempCMP.ProductName = isGoingToBeA ? "A" : "B";
+            if(isGoingToBeA) ACorps++;
             TempCMP.PreviousPrice = isGoingToBeA? ProductAPrice : ProductBPrice;
             TempCMP.PreviousUnitsProduced = 0;
             TempCMP.Salary = Salary;

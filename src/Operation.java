@@ -121,18 +121,18 @@ public class Operation extends GlobalENV{
                 Revenue -= C.Salary;
             }
 
-            if(TMP) C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50);
+            if(TMP) C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25);
 
             if(RPI) {
-                C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50);
+                C.PriceMultiplier += R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25);
                 if(R.nextDouble() < C.GreedMultiplier) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25));
             }else if(RPD) {
-                C.PriceMultiplier -= R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50);
+                C.PriceMultiplier -= R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/25);
                 if(R.nextDouble() < 1-C.GreedMultiplier) C.Salary += (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/25));
                 else C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/25));
             }
 
-            if(C.PriceMultiplier < 0) C.PriceMultiplier = 0.75;
+            if(C.PriceMultiplier < 0) C.PriceMultiplier = 0.85;
             if(TMP) C.Wealth = Revenue;
             else C.Wealth += Revenue;
             if(C.PreviousUnitsProduced <= 0)  {
@@ -190,6 +190,54 @@ public class Operation extends GlobalENV{
                     break Inner;
                 }
             }
+        }
+    }
+
+    public static void Expand() {
+        int numOfNewCMPS = R.nextDouble() < 0.4 ? 1 : 0;
+        int highestID = 0;
+        for(Company C : Companies) {
+            //if(C.PreviousUnitsProduced > (EmployeesPerCompany * Energy)) numOfNewCMPS++;
+            if(highestID < C.ID) highestID = C.ID;
+        }
+
+        double[] allSalaries = new double[Companies.size()];
+        int Ind = 0;
+        double medianSalary = 0;
+        for(Company C : Companies){ 
+            allSalaries[Ind] = C.Salary;
+            Ind++;
+        }
+
+        Arrays.sort(allSalaries);
+        if (allSalaries.length % 2 == 0) medianSalary = ((double)allSalaries[allSalaries.length/2] + (double)allSalaries[allSalaries.length/2 - 1])/2;
+        else medianSalary = (double) allSalaries[allSalaries.length/2];
+
+        for(int i = 0;i < numOfNewCMPS; i++) {
+            Company TempCMP = new Company();
+            TempCMP.ID = highestID + 1;
+            TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
+            boolean isGoingToBeA = R.nextDouble() <= AtoBCompanyRatio? true : false;
+            TempCMP.ProductName = isGoingToBeA ? "A" : "B";
+            if(isGoingToBeA) ACorps++;
+            TempCMP.PreviousPrice = isGoingToBeA? AverageProductAPrice * LowestPriceMultiplier : AverageProductBPrice * LowestPriceMultiplier;
+            TempCMP.PreviousUnitsProduced = 0;
+            TempCMP.Salary = medianSalary * 1.01;
+            TempCMP.Wealth = CompanyWealth;
+            TempCMP.PriceMultiplier = R.nextDouble(LowestPriceMultiplier, HighestPriceMultiplier);
+            TempCMP.RawMaterials = RawMaterials;
+            for(int j = 0; j < EmployeesPerCompany; j++) {
+                Employee TempEMP = new Employee();
+                TempEMP.Energy = Energy;
+                TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
+                TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+                TempEMP.Salary = TempCMP.Salary;
+                TempEMP.Wealth = EmployeeWealth;
+                TempCMP.Employees.add(TempEMP);
+            }
+
+            Companies.add(TempCMP);
+            NumberOfCompanies ++;
         }
     }
 

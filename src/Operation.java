@@ -66,7 +66,7 @@ public class Operation extends GlobalENV{
             for(Employee E : C.Employees) {
                 int UpdatedEnergy = 0;
                 if(E.Wealth > 0) {
-                    if(AverageProductAPrice * 10 < C.Salary) {
+                    if(AverageProductAPrice * LowestFoodIntake < C.Salary) {
                         Entry<Double, Integer> APurchase = Purchase("A", E.FoodConsumptionFactor * E.Salary);
                         E.Wealth -= APurchase.getKey();
                         E.Salary -= APurchase.getKey();
@@ -81,7 +81,9 @@ public class Operation extends GlobalENV{
                         }else {
                             E.FoodConsumptionFactor += (E.FoodConsumptionFactor * E.FearFactor);
                         }
+                        E.Wealth += C.Salary;
                     } else {
+                        E.Wealth += C.Salary;
                         double tempWealthRatio = 1 - ((AverageProductAPrice * 10) / E.Wealth);
                         if(tempWealthRatio > 1) tempWealthRatio = 1;
                         Entry<Double, Integer> APurchase = Purchase("A", tempWealthRatio * E.Wealth);

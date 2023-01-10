@@ -11,9 +11,9 @@ public class App extends Operation {
 
             double var = 0;
             for(Company C : Companies) {
-                if(C.Salary < MW) C.Salary = MW; // Minimum wage
+                if(C.Salary < MW) C.Salary = MW;
                 var += C.PriceMultiplier;
-                //for(Employee E : C.Employees) var2 += E.;
+                //for(Employee E : C.Employees) E.Wealth += 1000;
             }
 
             /*for(Company TempCMP : Companies) {

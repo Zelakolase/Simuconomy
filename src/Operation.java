@@ -67,7 +67,7 @@ public class Operation extends GlobalENV{
                 int UpdatedEnergy = 0;
                 if(E.Wealth > 0) {
                     if(AverageProductAPrice * LowestFoodIntake < C.Salary) {
-                        Entry<Double, Integer> APurchase = Purchase("A", E.FoodConsumptionFactor * E.Salary);
+                        Entry<Double, Integer> APurchase = Purchase("A", E.AConsumptionFactor * E.Salary);
                         E.Wealth -= APurchase.getKey();
                         E.Salary -= APurchase.getKey();
                         UpdatedEnergy += ProductAEnergyMultiplier * APurchase.getValue();
@@ -79,10 +79,10 @@ public class Operation extends GlobalENV{
                             UpdatedEnergy += ProductBEnergyMultiplier * BPurchase.getValue();
                             E.FearFactor -= R.nextDouble(0.02, 0.1);
                         }else {
-                            E.FoodConsumptionFactor += (E.FoodConsumptionFactor * E.FearFactor);
+                            E.AConsumptionFactor += (E.AConsumptionFactor * E.FearFactor);
                         }
                     } else {
-                        double tempWealthRatio = 1 - ((AverageProductAPrice * 10) / E.Wealth);
+                        double tempWealthRatio = 1 - ((AverageProductAPrice * LowestFoodIntake) / E.Wealth);
                         if(tempWealthRatio > 1) tempWealthRatio = 1;
                         Entry<Double, Integer> APurchase = Purchase("A", tempWealthRatio * E.Wealth);
                         E.Wealth -= APurchase.getKey();
@@ -94,8 +94,8 @@ public class Operation extends GlobalENV{
                 
                 E.Energy = UpdatedEnergy;
                 if(E.FearFactor < 0) E.FearFactor = LowestFearFactor;
-                if(E.FoodConsumptionFactor > 1) E.FoodConsumptionFactor = 1;
-                if(E.FoodConsumptionFactor < 0) E.FoodConsumptionFactor = 0.25;
+                if(E.AConsumptionFactor > 1) E.AConsumptionFactor = 1;
+                if(E.AConsumptionFactor < 0) E.AConsumptionFactor = 0.25;
             }
         }
     }
@@ -180,7 +180,7 @@ public class Operation extends GlobalENV{
                         EMPtoTransfer = new Employee();
                         EMPtoTransfer.Energy = Energy;
                         EMPtoTransfer.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
-                        EMPtoTransfer.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+                        EMPtoTransfer.AConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
                         EMPtoTransfer.Salary = C.Salary;
                         EMPtoTransfer.Wealth = EmployeeWealth;
                     }else {
@@ -230,7 +230,7 @@ public class Operation extends GlobalENV{
                 Employee TempEMP = new Employee();
                 TempEMP.Energy = Energy;
                 TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
-                TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+                TempEMP.AConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
                 TempEMP.Salary = TempCMP.Salary;
                 TempEMP.Wealth = EmployeeWealth;
                 TempCMP.Employees.add(TempEMP);

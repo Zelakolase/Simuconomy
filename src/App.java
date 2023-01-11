@@ -9,11 +9,14 @@ public class App extends Operation {
             EmployeeTransfer();
             Expand();
 
-            double var = 0;
+            double var = 0, var2 = 0;
             for(Company C : Companies) {
                 if(C.Salary < MW) C.Salary = MW;
-                var += C.PriceMultiplier;
-                for(Employee E : C.Employees) E.Wealth += AverageProductAPrice * 100;
+                var += !Double.isNaN(C.Wealth) ? C.Wealth : 0;
+                for(Employee E : C.Employees) {
+                    var2 += E.Wealth = !Double.isNaN(E.Wealth) ? E.Wealth : 0;
+                    //E.Wealth += 1000;
+                }
             }
 
             /*for(Company TempCMP : Companies) {
@@ -28,8 +31,8 @@ public class App extends Operation {
                 }
             }*/
 
-            var /= NumberOfCompanies;
-            System.out.println((var-1) * 100);
+            double f = var + var2;
+            System.out.println((var/f)*100+", "+(var2/f)*100);
             //System.out.println(var);
             MW = MW + ((var-1) * MW);
         }

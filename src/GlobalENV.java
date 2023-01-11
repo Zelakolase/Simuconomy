@@ -27,7 +27,7 @@ public class GlobalENV extends Init {
                 Employee TempEMP = new Employee();
                 TempEMP.Energy = Energy;
                 TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
-                TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+                TempEMP.AConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
                 TempEMP.Salary = TempCMP.Salary;
                 TempEMP.Wealth = EmployeeWealth;
                 TempCMP.Employees.add(TempEMP);

@@ -81,9 +81,7 @@ public class Operation extends GlobalENV{
                         }else {
                             E.FoodConsumptionFactor += (E.FoodConsumptionFactor * E.FearFactor);
                         }
-                        E.Wealth += C.Salary;
                     } else {
-                        E.Wealth += C.Salary;
                         double tempWealthRatio = 1 - ((AverageProductAPrice * 10) / E.Wealth);
                         if(tempWealthRatio > 1) tempWealthRatio = 1;
                         Entry<Double, Integer> APurchase = Purchase("A", tempWealthRatio * E.Wealth);

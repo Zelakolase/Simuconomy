@@ -13,7 +13,7 @@ public class App extends Operation {
             for(Company C : Companies) {
                 if(C.Salary < MW) C.Salary = MW;
                 var += C.PriceMultiplier;
-                //for(Employee E : C.Employees) E.Wealth += 1000;
+                for(Employee E : C.Employees) E.Wealth += AverageProductAPrice * 100;
             }
 
             /*for(Company TempCMP : Companies) {

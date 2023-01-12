@@ -11,7 +11,7 @@ public class App extends Operation {
 
             double var = 0, var2 = 0;
             for(Company C : Companies) {
-                if(C.Salary < MW) C.Salary = MW;
+                //if(C.Salary < LowestSalary) C.Salary = LowestSalary;
                 var += !Double.isNaN(C.Wealth) ? C.Wealth : 0;
                 for(Employee E : C.Employees) {
                     var2 += E.Wealth = !Double.isNaN(E.Wealth) ? E.Wealth : 0;

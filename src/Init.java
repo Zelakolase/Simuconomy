@@ -8,7 +8,7 @@ public class Init {
     public static double AtoBCompanyRatio = 0.5;
 
     // Initalized values, might change throughout the simulation
-    public static double LowestFoodIntake = 30;
+    public static double LowestFoodIntake = 10;
     public static double LowestPriceMultiplier = 0.85;
     public static double HighestPriceMultiplier = 1.05;
     public static double LowestGreedMultiplier = 0.25;

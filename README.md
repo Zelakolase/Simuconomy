@@ -1,6 +1,6 @@
 ## Simuconomy
 Economic simulator with a lot of options, an accurate model as a replacement to agent-model inaccurate simulations. Used for Research and Development.
-![Image](back.jpg)
+![Image](back.png)
 
 ## TODO 
 - Multithreading: You can launch multiple simulations at a time.

@@ -10,7 +10,7 @@ public class App extends Operation {
 
             double var = 0;
             for(Company C : Companies) {
-                //if(C.Salary < LowestSalary) C.Salary = LowestSalary;
+                if(C.Salary < LowestSalary) C.Salary = LowestSalary;
                 for(Employee E : C.Employees) {
                     //E.Wealth += 1000;
                 }
@@ -32,6 +32,7 @@ public class App extends Operation {
             //System.out.println(AverageProductAPrice+", "+AverageProductBPrice);
 
             System.out.println(var);
+
         }
     }
 }

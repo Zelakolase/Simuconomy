@@ -13,7 +13,7 @@ public class Operation extends GlobalENV{
         for(Company C : Companies) {
             int UnitsToProduce = 0;
             for(Employee E : C.Employees) {
-                UnitsToProduce += E.Energy;
+                UnitsToProduce += (E.Energy * C.Efficiency);
                 E.Energy = 0;
             }
 
@@ -143,6 +143,13 @@ public class Operation extends GlobalENV{
             int deltaEmployees = C.Employees.size() - EmployeesPerCompany;
             if(deltaEmployees > 0 && !(RPI || RPD)) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50));
             else if(deltaEmployees < 0 && !(RPI || RPD)) C.Salary += (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50));
+            if(C.Wealth > efficiencyCost) {
+                if(R.nextDouble() < 0.5) {
+                    double percent = (1-C.GreedMultiplier) / 10;
+                    C.Efficiency += R.nextDouble(percent, 1.2 * percent);
+                    C.Wealth -= C.Wealth * percent;
+                }
+            }
         }
     }
 

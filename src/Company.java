@@ -10,5 +10,6 @@ public class Company {
     public String ProductName;
     public double PreviousPrice;
     public int PreviousUnitsProduced;
+    public double Efficiency = 1.0;
     public ArrayList<Employee> Employees = new ArrayList<>();
 }

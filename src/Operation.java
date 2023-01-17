@@ -63,6 +63,17 @@ public class Operation extends GlobalENV{
                 }
             }
 
+            /*
+             * Experimental
+             */
+            if(C.Wealth * 0.2 > efficiencyCostAsA * AverageProductAPrice) {
+                if(R.nextDouble() < 0.5) {
+                    Entry<Double, Integer> Eff = Purchase("A", (int) efficiencyCostAsA, C.Wealth);
+                    C.Wealth -= Eff.getKey();
+                    C.Efficiency += R.nextDouble(0.05 * (Eff.getValue()/efficiencyCostAsA), 0.15 * (Eff.getValue()/efficiencyCostAsA));
+                }
+            }
+
             for(Employee E : C.Employees) {
                 int UpdatedEnergy = 0;
                 if(E.Wealth > 0) {
@@ -143,13 +154,6 @@ public class Operation extends GlobalENV{
             int deltaEmployees = C.Employees.size() - EmployeesPerCompany;
             if(deltaEmployees > 0 && !(RPI || RPD)) C.Salary -= (C.Salary * R.nextDouble(C.GreedMultiplier/100, C.GreedMultiplier/50));
             else if(deltaEmployees < 0 && !(RPI || RPD)) C.Salary += (C.Salary * R.nextDouble((1-C.GreedMultiplier)/100, (1-C.GreedMultiplier)/50));
-            if(C.Wealth > efficiencyCost) {
-                if(R.nextDouble() < 0.5) {
-                    double percent = (1-C.GreedMultiplier) / 10;
-                    C.Efficiency += R.nextDouble(percent, 1.2 * percent);
-                    C.Wealth -= C.Wealth * percent;
-                }
-            }
         }
     }
 

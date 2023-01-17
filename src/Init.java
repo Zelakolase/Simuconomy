@@ -25,5 +25,5 @@ public class Init {
     public static double ProductAPrice = ((HighestSalary * EmployeesPerCompany) / (Energy * EmployeesPerCompany)) * 1.1;
     public static double ProductBPrice = ProductAPrice * 1.5;
     public static int RawMaterials = (int) (BDependencyOnA * Energy * EmployeesPerCompany * 12);
-    public static double efficiencyCost = 1000;
+    public static double efficiencyCostAsA = 50;
 }

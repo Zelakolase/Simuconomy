@@ -30,10 +30,8 @@ public class App extends Operation {
                     TempCMP.Employees.add(TempEMP);
                 }
             }*/
-
-            System.out.println(var);
-
             inf /= NumberOfCompanies;
+            System.out.println(var+", "+(inf-1) * 100);
             MW += (MW * (inf - 1));
 
         }

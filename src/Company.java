@@ -11,5 +11,7 @@ public class Company {
     public double PreviousPrice;
     public int PreviousUnitsProduced;
     public double Efficiency = 1.0;
+    public Employee CEO = new Employee();
     public ArrayList<Employee> Employees = new ArrayList<>();
+    public double HighestSF;
 }

@@ -11,6 +11,7 @@ public class GlobalENV extends Init {
 
     public static void Initalize() {
         for(int i = 0;i < NumberOfCompanies; i++) {
+            double HighestSkill = 0;
             Company TempCMP = new Company();
             TempCMP.ID = i;
             TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
@@ -30,28 +31,50 @@ public class GlobalENV extends Init {
                 TempEMP.AConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
                 TempEMP.Salary = TempCMP.Salary;
                 TempEMP.Wealth = EmployeeWealth;
+                TempEMP.PotentialSkillandWellbeing = Skew(1.0, 3.0, 1, -2);
+                TempEMP.ActualSkillandWellbeing = TempEMP.PotentialSkillandWellbeing;
+                if(TempEMP.PotentialSkillandWellbeing > HighestSkill) HighestSkill = TempEMP.PotentialSkillandWellbeing;
                 TempCMP.Employees.add(TempEMP);
             }
+            Employee CEO = new Employee();
+            CEO.Wealth = (CompanyWealth + EmployeeWealth) / 2;
+            CEO.Salary = HighestSalary;
+            CEO.Energy = Energy;
+            CEO.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
+            CEO.AConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
+
+            TempCMP.CEO = CEO;
+            TempCMP.HighestSF = HighestSkill;
             Companies.add(TempCMP);
         }
     }
 
     // returns random Company ID
-    public static int FindCompanyBySalaryRange(boolean higherThan, double bound) {
-        ArrayList<Company> tempCMP = new ArrayList<>();
+    public static int[] FindCompanyBySalaryRange(double bound) {
+        ArrayList<Company> tempCMP0 = new ArrayList<>();
+        ArrayList<Company> tempCMP1 = new ArrayList<>();
         for(Company C : Companies) {
-            if(higherThan) {
-                if(C.Salary > bound) tempCMP.add(C);
-            }
-            else {
-                if(C.Salary <= bound) tempCMP.add(C);
-            }
+            if(C.Salary > bound) tempCMP0.add(C);
+            if(C.Salary <= bound) tempCMP1.add(C);
         }
 
-        if(!tempCMP.isEmpty()){
-            int randIndex = R.nextInt(0, tempCMP.size());
-            return tempCMP.get(randIndex).ID;
+        if(!tempCMP0.isEmpty() && !tempCMP1.isEmpty()){
+            int randIndex = R.nextInt(0, tempCMP0.size());
+            int randIndex2 = R.nextInt(0, tempCMP1.size());
+            return new int[] {randIndex, randIndex2};
         }
-        return -1;
+        return new int[] {-1, -1};
+    }
+
+    /*
+     * From: https://stackoverflow.com/a/13548135
+     */
+    static public double Skew(double min, double max, double skew, double bias) {
+        double range = max - min;
+        double mid = min + range / 2.0;
+        double unitGaussian = R.nextGaussian();
+        double biasFactor = Math.exp(bias);
+        double retval = mid+(range*(biasFactor/(biasFactor+Math.exp(-unitGaussian/skew))-0.5));
+        return retval;
     }
 }

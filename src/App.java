@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class App extends Operation {
     public static void main(String[] args) throws Exception {
         Initalize(); // <- From GlobalENV class
@@ -9,31 +12,38 @@ public class App extends Operation {
             EmployeeTransfer();
             Expand();
 
-            double var = 0, inf = 0;
+            double MoMInflation = 0;
+
+            double GDPA = 0; double MedianSalary = 0; ArrayList<Double> AllSalaries = new ArrayList<>(); double HighestSalary0 = 0; double LowestSalary0 = 0;
+
             for(Company C : Companies) {
-                if(C.Salary < MW) C.Salary = MW;
-                inf += C.PriceMultiplier;
-                for(Employee E : C.Employees) {
-                    //E.Wealth += 1000;
+                //if(C.Salary < LowestSalary) C.Salary = LowestSalary;
+                MoMInflation += C.PriceMultiplier;
+                if(C.ProductName.equals("A")) GDPA += C.PreviousUnitsProduced;
+                if(C.CEO.Salary != C.CEO.Salary) C.CEO.Salary = HighestSalary;
+                AllSalaries.add(C.CEO.Salary);
+                MedianSalary += C.CEO.Salary;
+                for(Employee e : C.Employees) {
+                    // e.Wealth += 50;
+                    if(e.Salary != e.Salary) e.Salary = LowestSalary * e.ActualSkillandWellbeing;
+                    AllSalaries.add(e.Salary);
+                    MedianSalary += e.Salary;
                 }
-                var += C.PreviousUnitsProduced;
             }
+            double[] AS = new double[AllSalaries.size()];
+            for(int M = 0;M < AllSalaries.size();M++) AS[M] = AllSalaries.get(M);
+            MoMInflation /= NumberOfCompanies;
+            Arrays.sort(AS);
+            HighestSalary0 = AS[AS.length-1];
+            LowestSalary0 = AS[0];
+            MedianSalary /= AllSalaries.size();
 
-            /*for(Company TempCMP : Companies) {
-                if(TempCMP.PreviousUnitsProduced > 0) {
-                    Employee TempEMP = new Employee();
-                    TempEMP.Energy = Energy;
-                    TempEMP.FearFactor = R.nextDouble(LowestFearFactor, HighestFearFactor);
-                    TempEMP.FoodConsumptionFactor = R.nextDouble(LowestAConsumptionFactor, HighestAConsumptionFactor);
-                    TempEMP.Salary = TempCMP.Salary;
-                    TempEMP.Wealth = EmployeeWealth;
-                    TempCMP.Employees.add(TempEMP);
-                }
-            }*/
-            inf /= NumberOfCompanies;
-            System.out.println(var+", "+(inf-1) * 100);
-            MW += (MW * (inf - 1));
+            double P = GDPA / (AllSalaries.size() * LowestFoodIntake);
+            double E = Math.abs(HighestSalary0 - LowestSalary0) / MedianSalary;
 
+            if(i > 300) System.out.println(P+", "+E);
+
+            MW += (MW * (MoMInflation - 1));
         }
     }
 }

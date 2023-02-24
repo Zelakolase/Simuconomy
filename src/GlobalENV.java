@@ -1,20 +1,23 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GlobalENV extends Init {
-    public static ArrayList<Company> Companies = new ArrayList<>();
+    volatile public static ArrayList<Company> Companies = new ArrayList<>();
     public static OfferList offerList = new OfferList();
     public static double AverageProductAPrice = 0;
     public static double AverageProductBPrice = 0;
-    public static int ACorps = 0;
+    volatile public static int ACorps = 0;
     static Random R = new Random();
+    public static ExecutorService ES = Executors.newCachedThreadPool();
 
     public static void Initalize() {
         for(int i = 0;i < NumberOfCompanies; i++) {
             double HighestSkill = 0;
             Company TempCMP = new Company();
             TempCMP.ID = i;
-            TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
+            TempCMP.GreedMultiplier = Skew(LowestGreedMultiplier, HighestGreedMultiplier, 1, -2);
             boolean isGoingToBeA = R.nextDouble() <= AtoBCompanyRatio? true : false;
             TempCMP.ProductName = isGoingToBeA ? "A" : "B";
             if(isGoingToBeA) ACorps++;

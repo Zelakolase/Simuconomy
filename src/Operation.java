@@ -1,9 +1,9 @@
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map.Entry;
-
 public class Operation extends GlobalENV {
     static double medianSalary = -1;
+    static int highestID = 0;
     /*
      * Work() iterates over all companies, sums up all employees' energies and puts an offer on the market
      */
@@ -83,7 +83,6 @@ public class Operation extends GlobalENV {
                     Entry<Double, Integer> RawMaterialPurchaseProcess = Purchase("A", UnitsToPurchase, C.Wealth);
                     C.RawMaterials += RawMaterialPurchaseProcess.getValue();
                     C.Wealth -= RawMaterialPurchaseProcess.getKey();
-                    if(C.Wealth < 0)System.out.print("0");
                 }
             }
 
@@ -92,12 +91,11 @@ public class Operation extends GlobalENV {
              * when the company can buy 1 upgrade unit, productivity increases 5%-10%.
              * This is a head-tail situation.
              */
-            if (C.Wealth * R.nextDouble(0.05, 0.15) > efficiencyCostAsB * AverageProductAPrice) {
-                if (R.nextDouble() < 0.5) {
-                    Entry<Double, Integer> Eff = Purchase("B", (int) efficiencyCostAsB, C.Wealth);
+            if (C.Wealth * R.nextDouble(0.05, 0.15) > efficiencyCostAsA * AverageProductAPrice) {
+                if (R.nextDouble() <= 0.75) {
+                    Entry<Double, Integer> Eff = Purchase("B", (int) efficiencyCostAsA, C.Wealth);
                     C.Wealth -= Eff.getKey();
-                    if(C.Wealth < 0)System.out.print("1");
-                    double UpgradeValue = Eff.getValue() / efficiencyCostAsB; // 1.0 is default, if the company can buy more than one upgrade, it will be effective
+                    double UpgradeValue = Eff.getValue() / efficiencyCostAsA; // 1.0 is default, if the company can buy more than one upgrade, it will be effective
                     if (UpgradeValue > 0) C.Efficiency += R.nextDouble(0.05 * UpgradeValue, 0.1 * UpgradeValue);
                 }
             }
@@ -112,27 +110,28 @@ public class Operation extends GlobalENV {
      */
     private static Employee EUpdate(Employee E) {
         int UpdatedEnergy = 0;
+        boolean FoodA = AverageProductAPrice > AverageProductBPrice ? false : true;
         if (E.Wealth > 0) {
             /*
              * If the survival consumption of salary is higher than the actual survival cost
              */
-            if (AverageProductAPrice * LowestFoodIntake <= E.Salary * E.AConsumptionFactor) {
+            if ((FoodA ? AverageProductAPrice : AverageProductBPrice) * LowestFoodIntake <= E.Salary * E.AConsumptionFactor) {
                 /*
                  * The salary is sufficient to cover survival costs
                  */
-                Entry<Double, Integer> APurchase = Purchase("A", E.AConsumptionFactor * E.Salary);
+                Entry<Double, Integer> APurchase = Purchase(FoodA? "A" : "B", E.Salary * E.AConsumptionFactor);
                 E.Wealth -= APurchase.getKey();
                 E.Salary -= APurchase.getKey();
-                UpdatedEnergy += ProductAEnergyMultiplier * APurchase.getValue();
+                UpdatedEnergy += (FoodA ? ProductAEnergyMultiplier : ProductBEnergyMultiplier) * APurchase.getValue();
 
                 if (E.Salary > 0 && APurchase.getValue() > LowestFoodIntake) {
                     /*
                      * If there is remaining salary and we survived (hopefully), purchase luxury units
                      */
-                    Entry<Double, Integer> BPurchase = Purchase("B", E.Salary);
+                    Entry<Double, Integer> BPurchase = Purchase(FoodA? "B" : "A", E.Salary);
                     E.Wealth -= BPurchase.getKey();
                     E.Salary -= BPurchase.getKey();
-                    UpdatedEnergy += ProductBEnergyMultiplier * BPurchase.getValue();
+                    UpdatedEnergy += (FoodA ? ProductBEnergyMultiplier : ProductAEnergyMultiplier) * BPurchase.getValue();
                     /*
                      * Prioritize luxury spending by decreasing survival consumption factor
                      * If FearFactor = 0.2, AConsumptionFactor will be decreased by 30%.
@@ -154,7 +153,7 @@ public class Operation extends GlobalENV {
                  * The salary is not sufficient to cover survival costs
                  * If survival costs 30% of total wealth, tempWealthRatio is 70%
                  */
-                double tempWealthRatio = 1 - ((AverageProductAPrice * LowestFoodIntake) / E.Wealth);
+                double tempWealthRatio = 1 - (((FoodA ? AverageProductAPrice : AverageProductBPrice) * LowestFoodIntake) / E.Wealth);
                 /*
                  * Not doing this will cause the employee to spend non-existent money
                  */
@@ -162,7 +161,7 @@ public class Operation extends GlobalENV {
                 /*
                  * Will purchase survival costs with Wealth
                  */
-                Entry<Double, Integer> APurchase = Purchase("A", E.Wealth * tempWealthRatio);
+                Entry<Double, Integer> APurchase = Purchase(FoodA? "A" : "B", E.Wealth * tempWealthRatio);
                 E.Wealth -= APurchase.getKey();
                 E.Salary -= APurchase.getKey();
                 UpdatedEnergy += ProductAEnergyMultiplier * APurchase.getValue();
@@ -184,8 +183,21 @@ public class Operation extends GlobalENV {
     }
 
     public static void Revenue() {
+        ArrayList<Company> ToRemove = new ArrayList<>();
+        double[] empspercmp = new double[NumberOfCompanies];
+        int index = 0;
+
         for (Company C : Companies) {
-            OfferList.Offer F = offerList.List.get(C.ID);
+            empspercmp[index] = C.Employees.size();
+            index++;
+
+            OfferList.Offer F = null;
+            for(OfferList.Offer T : offerList.List) {
+                if(T.CompanyID == C.ID) {
+                    F = T;
+                    break;
+                }
+            }
             if(C.PreviousUnitsProduced < F.UnitsAvailable) continue;
             /*
              * (R)equire (P)rice (I)ncrement if all the offer units are sold
@@ -201,7 +213,11 @@ public class Operation extends GlobalENV {
             /*
              * The company has no money, skip
              */
-            if(Revenue + C.Wealth == 0 || C.Wealth <= 0 || Revenue < 0) continue; // Dead
+            if(Revenue + C.Wealth == 0 || C.Wealth <= 0 || Revenue < 0 || C.Salary <= 0 || Double.isInfinite(F.Price)) {
+                ToRemove.add(C);
+                if(C.ProductName.equals("A")) ACorps --;
+                continue;
+            } // Dead
 
             boolean OneTimeFlag = false;
             /*
@@ -212,7 +228,7 @@ public class Operation extends GlobalENV {
             while (Revenue * (1 - RevPercent) <= (C.Salary * C.Employees.size() * 3)) {
                 if(!OneTimeFlag) OneTimeFlag = true;
                 if(OneTimeFlag) Revenue += C.Wealth; // Company wealth will be used to pay out workers
-                C.Salary *= 1 - R.nextDouble(C.GreedMultiplier / 150, C.GreedMultiplier / 50);
+                C.Salary *= 1 - R.nextDouble(C.GreedMultiplier / 150, C.GreedMultiplier / 100);
                 /*
                  * TMP flag is raised if the revenue is not sufficient and we needed the company wealth
                  */
@@ -273,7 +289,7 @@ public class Operation extends GlobalENV {
                  * and 10% chance to increase salary by 0.067% - 0.1%, otherwise decrease salary by 0.6% - 0.9%
                  */
                 C.PriceMultiplier -= R.nextDouble((1-C.GreedMultiplier) / 150, (1-C.GreedMultiplier) / 100);
-                if (R.nextDouble() < 1 - C.GreedMultiplier) C.Salary *= 1 + R.nextDouble((1 - C.GreedMultiplier) / 150, (1 - C.GreedMultiplier) / 100);
+                if (R.nextDouble() < 1 - C.GreedMultiplier) C.Salary *= 1 + R.nextDouble((1 - C.GreedMultiplier) / 100, (1 - C.GreedMultiplier) / 10);
                 else C.Salary *= 1 - R.nextDouble(C.GreedMultiplier / 150, C.GreedMultiplier / 100);
             }
 
@@ -296,6 +312,10 @@ public class Operation extends GlobalENV {
                 else if (deltaEmployees < 0 && !(RPI || RPD || TMP)) C.Salary *= 1 + R.nextDouble((1 - C.GreedMultiplier) / 150, (1 - C.GreedMultiplier) / 100);
             }
         }
+
+        Companies.removeAll(ToRemove);
+        NumberOfCompanies = Companies.size();
+        EmployeesPerCompany = (int) Median.median(empspercmp);
     }
 
     public static void EmployeeTransfer() {
@@ -334,15 +354,14 @@ public class Operation extends GlobalENV {
     }
 
     public static void Expand() {
-        int numOfNewCMPS = R.nextDouble() > 0.5 ? 1 : 0;
-        int highestID = 0;
+        int numOfNewCMPS = (int) Skew(0, 0.01 * NumberOfCompanies, 1, -2);
 
         if(medianSalary == -1) mSalary();
 
         for (int i = 0; i < numOfNewCMPS; i++) {
             Company TempCMP = new Company();
             TempCMP.ID = highestID + i + 1;
-            TempCMP.GreedMultiplier = R.nextDouble(LowestGreedMultiplier, HighestGreedMultiplier);
+            TempCMP.GreedMultiplier = Skew(LowestGreedMultiplier, HighestGreedMultiplier, 1, -2);
             boolean isGoingToBeA = R.nextDouble() <= AtoBCompanyRatio ? true : false;
             TempCMP.ProductName = isGoingToBeA ? "A" : "B";
             if (isGoingToBeA) ACorps++;
@@ -377,11 +396,12 @@ public class Operation extends GlobalENV {
             offerList.HighestUnit = -1;
 
         } else if (offerList.HighestUnit > 0) {
-            for (OfferList.Offer F : offerList.List) {
+            for (int i = 0; i < offerList.List.size(); i++) {
+                OfferList.Offer F = offerList.List.get(i);
                 int MaxPurchasableUnits = (int) (ToSpend / F.Price);
                 MaxPurchasableUnits = MaxPurchasableUnits > F.UnitsAvailable ? F.UnitsAvailable : MaxPurchasableUnits;
                 if (OptimalUnits < MaxPurchasableUnits) {
-                    OptimalIndex = F.CompanyID;
+                    OptimalIndex = i;
                     OptimalUnits = MaxPurchasableUnits;
                 }
             }
@@ -423,11 +443,12 @@ public class Operation extends GlobalENV {
         } else if (offerList.HighestUnit > 0) {
             int OptimalIndex = 0, OptimalUnits = 0;
 
-            for (OfferList.Offer F : offerList.List) {
+            for (int i = 0; i < offerList.List.size(); i++) {
+                OfferList.Offer F = offerList.List.get(i);
                 int MaxPurchasableUnits = (int) (ToSpend / F.Price);
                 MaxPurchasableUnits = MaxPurchasableUnits > F.UnitsAvailable ? F.UnitsAvailable : MaxPurchasableUnits;
                 if (OptimalUnits < MaxPurchasableUnits) {
-                    OptimalIndex = F.CompanyID;
+                    OptimalIndex = i;
                     OptimalUnits = MaxPurchasableUnits;
                 }
             }
@@ -441,7 +462,7 @@ public class Operation extends GlobalENV {
 
     private static void mSalary() {
         double[] allSalaries = new double[Companies.size()];
-        int Ind = 0, highestID = 0;
+        int Ind = 0;
         for (Company C : Companies) {
             allSalaries[Ind] = C.Salary;
             Ind++;

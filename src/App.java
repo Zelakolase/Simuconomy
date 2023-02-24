@@ -1,10 +1,14 @@
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class App extends Operation {
     public static void main(String[] args) throws Exception {
         Initalize(); // <- From GlobalENV class
         double MW = LowestSalary;
+        System.out.println("Inflation % (YoY), Mean Worker Salary, Real GDP (units produced), Average 'A' Product Price, Average 'B' Product Price");
+        double[] MoMInflation = new double[12]; int iterator = 0;
+        double avgSalaryYoY = 0; double totalEmployees = 0;
+        double Units = 0;
+        double AvgAPrice = 0; double AvgBPrice = 0;
         for(int i = 0;i < Iterations; i++) {
             Work();
             Demand();
@@ -12,38 +16,49 @@ public class App extends Operation {
             EmployeeTransfer();
             Expand();
 
-            double MoMInflation = 0;
-
-            double GDPA = 0; double MedianSalary = 0; ArrayList<Double> AllSalaries = new ArrayList<>(); double HighestSalary0 = 0; double LowestSalary0 = 0;
-
             for(Company C : Companies) {
-                //if(C.Salary < LowestSalary) C.Salary = LowestSalary;
-                MoMInflation += C.PriceMultiplier;
-                if(C.ProductName.equals("A")) GDPA += C.PreviousUnitsProduced;
-                if(C.CEO.Salary != C.CEO.Salary) C.CEO.Salary = HighestSalary;
-                AllSalaries.add(C.CEO.Salary);
-                MedianSalary += C.CEO.Salary;
+                if(C.Salary < LowestSalary) C.Salary = LowestSalary;
+                MoMInflation[iterator] += C.PriceMultiplier-1;
+                if(C.ProductName.equals("A")) {
+                    AvgAPrice += C.PreviousPrice;
+                }
+                else{ 
+                    AvgBPrice += C.PreviousPrice;
+                }
+
+                Units += C.PreviousUnitsProduced;
                 for(Employee e : C.Employees) {
-                    // e.Wealth += 50;
-                    if(e.Salary != e.Salary) e.Salary = LowestSalary * e.ActualSkillandWellbeing;
-                    AllSalaries.add(e.Salary);
-                    MedianSalary += e.Salary;
+                    avgSalaryYoY += e.Salary;
+                    totalEmployees ++;
                 }
             }
-            double[] AS = new double[AllSalaries.size()];
-            for(int M = 0;M < AllSalaries.size();M++) AS[M] = AllSalaries.get(M);
-            MoMInflation /= NumberOfCompanies;
-            Arrays.sort(AS);
-            HighestSalary0 = AS[AS.length-1];
-            LowestSalary0 = AS[0];
-            MedianSalary /= AllSalaries.size();
 
-            double P = GDPA / (AllSalaries.size() * LowestFoodIntake);
-            double E = Math.abs(HighestSalary0 - LowestSalary0) / MedianSalary;
+            AvgAPrice /= Companies.size();
+            AvgBPrice /= Companies.size();
 
-            if(i > 300) System.out.println(P+", "+E);
+            if(i % 12 == 0) { // YoY
+                double YoYInflation = 0;
+                double temp = 1;
+                for(int a = 0;a < MoMInflation.length; a++){
+                    YoYInflation += MoMInflation[a];
+                    temp *= MoMInflation[a];
+                }
+                YoYInflation += temp;
+                Arrays.fill(MoMInflation, 0);
 
-            MW += (MW * (MoMInflation - 1));
+                avgSalaryYoY /= (totalEmployees * 12);
+
+                System.out.println(YoYInflation*100+", "+avgSalaryYoY+", "+Units+", "+AvgAPrice/12+", "+AvgBPrice/12);
+
+                MW += (MW * (YoYInflation - 1));
+                avgSalaryYoY = 0;
+                iterator = 0;
+                Units = 0;
+                AvgAPrice = 0; AvgBPrice = 0;
+            }else {
+                iterator++;
+            }
+
         }
     }
 }

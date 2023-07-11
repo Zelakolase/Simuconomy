@@ -406,6 +406,14 @@ public class SparkDB {
     }
 
     /**
+     * Clear all rows from the table, leaving only the headers
+     */
+    public void clearRows() {
+        num_queries = 0;
+        for(String Header : Headers) Mapper.get(Header).clear();
+    }
+
+    /**
      * A bidirectional list between index value and String value
      *
      * @author Morad Abdelrasheed Mokhtar Ali Gill

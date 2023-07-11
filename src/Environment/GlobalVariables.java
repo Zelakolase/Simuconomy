@@ -5,5 +5,6 @@ package Environment;
  * @author Morad A.
  */
 public class GlobalVariables {
-    
+    /* How many agents to initialize */
+    public static int startingPopulation = 10;
 }

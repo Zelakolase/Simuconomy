@@ -1,6 +1,8 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Libraries.SparkDB;
+import Objects.Agent;
 
 /**
  * Main instance
@@ -9,6 +11,8 @@ import Libraries.SparkDB;
 public class App {
     /* Market Product Listing */
     static SparkDB Market = new SparkDB();
+    /* The list of Agents */
+    static HashMap<Long, Agent> AgentList = new HashMap<>(); 
     public static void main(String[] args) throws Exception {
         init();
     }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Environment.GlobalVariables;
 import Libraries.SparkDB;
 import Objects.Agent;
 
@@ -14,6 +15,7 @@ public class App {
     /* The list of Agents */
     static HashMap<Long, Agent> AgentList = new HashMap<>(); 
     public static void main(String[] args) throws Exception {
+        /* Initialize Economy */
         init();
     }
 
@@ -27,5 +29,10 @@ public class App {
             add("Price"); 
             add("AvailableUnits");
         }});
+
+        /* Initalize the starting Agent List based on GlobalVariables */
+        for(long AgentID = 0; AgentID < GlobalVariables.startingPopulation; AgentID ++) {
+            AgentList.put(AgentID, new Agent());
+        }
     }
 }

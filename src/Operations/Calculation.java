@@ -80,19 +80,20 @@ public class Calculation {
         if(Agent.getValue().panicCoefficient < 0) Agent.getValue().demandCapacity += ((absPC / 5.0) * Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
 
         /*
-         * If demandCapacity falls below zero, reset it to be baseDemandCapacity*supplyCapacity
-         * Increase Panic
-         */
-        if(Agent.getValue().demandCapacity < 0) {
-            Agent.getValue().demandCapacity = (int) (Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
-            Agent.getValue().panicCoefficient ++;
-        }
-        /*
          * If supplyCapacity falls below zero, reset it to be baseSupplyCapacity
-         * Decrease Panic
+         * Increase Panic
          */
         if(Agent.getValue().supplyCapacity < 0) { 
             Agent.getValue().supplyCapacity = Agent.getValue().baseSupplyCapacity;
+            Agent.getValue().panicCoefficient ++;
+        }
+
+        /*
+         * If demandCapacity falls below zero, reset it to be baseDemandCapacity*supplyCapacity
+         * Decrease Panic
+         */
+        if(Agent.getValue().demandCapacity < 0) {
+            Agent.getValue().demandCapacity = (int) (Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
             Agent.getValue().panicCoefficient --;
         }
 

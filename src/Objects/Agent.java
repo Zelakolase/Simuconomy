@@ -41,10 +41,12 @@ public class Agent {
      *      1. demandCapacity is not fulfilled in 'Demand' stage
      *      2. wealth has reached zero or below zero
      *      3. all products are sold
+     *      4. productionCapacity falls below zero
      * Panic is decreased if:
      *      1. demandCapacity is fulfilled in 'Demand' stage
      *      2. not all products are sold
      *      3. Wealth is sufficient
+     *      4. demandCapacity falls below zero
      */
     public int panicCoefficient = 0;
     /*

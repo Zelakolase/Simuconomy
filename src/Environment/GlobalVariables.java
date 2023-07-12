@@ -6,17 +6,15 @@ package Environment;
  */
 public class GlobalVariables {
     /* How many agents to initialize */
-    public static int startingPopulation = 100;
+    public static int startingPopulation = 2_500;
     /* The initialized price */
-    public static double startingPrice = 10.0;
+    public static double startingPrice = 5.0;
     /* The initalized baseDemandCapacity */
-    public static double startingBaseDemandCapacity = 0.5;
+    public static double startingBaseDemandCapacity = 0.75;
     /* The initalized baseSupplyCapacity */
     public static int startingBaseSupplyCapacity = 10;
     /* The initalized baseInflatorSensitivity */
-    public static double startingBaseInflatorSensitivity = 0.05;
+    public static double startingBaseInflatorSensitivity = 0.25;
     /* How many iterations should the economy run */
-    public static int iterations = 10;
-    /* The initalized wealth for each agent */
-    public static double startingWealth = startingPrice * startingBaseSupplyCapacity * 5;
+    public static int iterations = 500;
 }

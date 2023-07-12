@@ -6,7 +6,7 @@ package Environment;
  */
 public class GlobalVariables {
     /* How many agents to initialize */
-    public static int startingPopulation = 10;
+    public static int startingPopulation = 100;
     /* The initialized price */
     public static double startingPrice = 10.0;
     /* The initalized baseDemandCapacity */
@@ -16,7 +16,7 @@ public class GlobalVariables {
     /* The initalized baseInflatorSensitivity */
     public static double startingBaseInflatorSensitivity = 0.05;
     /* How many iterations should the economy run */
-    public static int iterations = 1;
+    public static int iterations = 10;
     /* The initalized wealth for each agent */
     public static double startingWealth = startingPrice * startingBaseSupplyCapacity * 5;
 }

@@ -11,7 +11,8 @@ import Objects.Agent;
  */
 public class Filter {
     public static void run(HashMap<Long, Agent> AgentList) {
-        HashMap<Long, Agent> replicaAgentList = AgentList;
+        HashMap<Long, Agent> replicaAgentList = new HashMap<>();
+        replicaAgentList.putAll(AgentList);
         for(Entry<Long, Agent> E : replicaAgentList.entrySet()) {
             if(E.getValue().isDead) AgentList.remove(E.getKey());
         }

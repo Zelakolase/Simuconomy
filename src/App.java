@@ -4,6 +4,7 @@ import java.util.Map.Entry;
 
 import Environment.GlobalVariables;
 import Libraries.SparkDB;
+import Libraries.Statistics;
 import Objects.Agent;
 import Operations.Calculation;
 import Operations.Demand;
@@ -36,6 +37,8 @@ public class App {
             Filter.run(AgentList);
             /* 5. Reproduction for the remaining folks */
             Reproduction.run(AgentList, Market);
+            /* 6. Show statistics */
+            Statistics.run(AgentList.values());
         }
     }
 
@@ -54,5 +57,8 @@ public class App {
         for(long AgentID = 0; AgentID < GlobalVariables.startingPopulation; AgentID ++) {
             AgentList.put(AgentID, new Agent());
         }
+
+        /* CSV Headers */
+        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply");
     }
 }

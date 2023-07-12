@@ -28,7 +28,7 @@ public class Agent {
     /*
      * How many units to produce every iteration
      */
-    public int supplyCapacity = baseSupplyCapacity;
+    public int supplyCapacity = baseSupplyCapacity * 2;
     /* 
      * How many units to demand every iteration
      */

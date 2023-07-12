@@ -53,7 +53,7 @@ public class Demand {
             if(optimalIndex == -1) break; // If there is no optimal offer, break.
             if(tempAvailableUnits < Agent.demandCapacity) Agent.panicCoefficient ++;
             else Agent.panicCoefficient = 0;
-            if(Agent.wealth - (tempPrice * tempAvailableUnits) < GlobalVariables.startingWealth) break;
+            if(Agent.wealth - (tempPrice * tempAvailableUnits) < -GlobalVariables.startingWealth) break;
 
             /* If the agent found food in market, and his net wealth was not under startingWealth, he is ALIVE */
             Agent.isDead = false;

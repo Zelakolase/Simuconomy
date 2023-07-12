@@ -13,7 +13,7 @@ public class Statistics {
     /**
      * Main Statistics function
      * Output format is as follows:
-     * GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply
+     * GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population
      * @param AgentList List of agents
      * @param Market Market Object
      */
@@ -35,7 +35,7 @@ public class Statistics {
         double arithmeticMeanWealths = arithmeticMean(Wealths);
         double CoefficientOfVariationWealth = standardDeviation(Wealths, arithmeticMeanWealths) / arithmeticMeanWealths;
 
-        System.out.println(GDPInUnits+","+CoefficientOfVariationWealth+","+AveragePanicCoefficient+","+AverageDemand+","+AverageSupply);
+        System.out.println(GDPInUnits+","+CoefficientOfVariationWealth+","+AveragePanicCoefficient+","+AverageDemand+","+AverageSupply+","+AgentList.size());
     }
 
     private static double standardDeviation(ArrayList<Double> in, double arithmeticMean) {
@@ -55,7 +55,7 @@ public class Statistics {
      */
     private static double arithmeticMean(ArrayList<Double> in) {
         double sum = 0;
-        for(Double number : in) sum += number;
+        for(Double number : in) sum += Math.abs(number);
         return sum / in.size();
     }
 }

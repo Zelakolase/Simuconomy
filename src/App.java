@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import Environment.GlobalVariables;
 import Libraries.SparkDB;
 import Objects.Agent;
+import Operations.Demand;
 import Operations.Supply;
 
 /**
@@ -21,9 +22,10 @@ public class App {
         init();
         /* The economic cycle */
         for(int iteration = 0; iteration < GlobalVariables.iterations; iteration ++) {
-            for(Entry<Long, Agent> E : AgentList.entrySet()) {
-                Supply.run(E.getKey(), E.getValue(), Market);
-            }
+            /* 1. Produce */
+            for(Entry<Long, Agent> E : AgentList.entrySet()) Supply.run(E.getKey(), E.getValue(), Market);
+            /* 2. Demand */
+            for(Entry<Long, Agent> E : AgentList.entrySet()) Demand.run(E.getValue(), Market);
         }
     }
 

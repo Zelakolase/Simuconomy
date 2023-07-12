@@ -7,6 +7,7 @@ import Libraries.SparkDB;
 import Objects.Agent;
 import Operations.Calculation;
 import Operations.Demand;
+import Operations.Filter;
 import Operations.Reproduction;
 import Operations.Supply;
 
@@ -31,7 +32,9 @@ public class App {
             /* 3. Calculation */
             for(Entry<Long, Agent> E : AgentList.entrySet()) Calculation.run(E, Market);
             Market.clearRows(); // Clear all offers
-            /* 4. Reproduction for the remaining folks */
+            /* 4. Filter out dead agents */
+            Filter.run(AgentList);
+            /* 5. Reproduction for the remaining folks */
             Reproduction.run(AgentList, Market);
         }
     }

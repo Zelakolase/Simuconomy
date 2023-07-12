@@ -15,16 +15,16 @@ public class Agent {
      * Inflator will be increased by inflatorSensitivity and decreased by 1.0 - inflatorSensitivity.
      * Should not be higher than 1.0 !!!
      */
-    public double baseInflatorSensitivity = GlobalVariables.startingBaseInflatorSensitivity; // This is a genetic trait
+    public double baseInflatorSensitivity = GlobalVariables.startingBaseInflatorSensitivity; // This is a genetic trait, modifiable
     /*
      * Base supply capacity is the gene trait for the starting supply capacity
      */
-    public int baseSupplyCapacity = GlobalVariables.startingBaseSupplyCapacity; // This is a genetic trait
+    public int baseSupplyCapacity = GlobalVariables.startingBaseSupplyCapacity; // This is a genetic trait, not-modifiable
     /*
      * Base demand capacity is the gene trait for the starting demand capacity as a percentage of baseSupplyCapacity
      * 0.5 means that demand will be 5 if supply is 10
      */
-    public double baseDemandCapacity = GlobalVariables.startingBaseDemandCapacity; // This is a genetic trait
+    public double baseDemandCapacity = GlobalVariables.startingBaseDemandCapacity; // This is a genetic trait, not-modifiable
     /*
      * How many units to produce every iteration
      */
@@ -34,7 +34,7 @@ public class Agent {
      */
     public int demandCapacity = (int) (baseDemandCapacity * baseSupplyCapacity);
     /*
-     * Panic iterations. If 5, it means that the agent has been panicking for 5 days.
+     * Panic iterations. If 5, it means that the agent has been panicking for 5 iterations.
      * Increased values will depress productivity till it reaches zero.
      *                  will depress demand till it reaches below baseDemandCapacity, where the agent will be dead.
      * One non-panic iteration will zero the variable.

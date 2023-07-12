@@ -33,4 +33,15 @@ public class Agent {
      * How many units to demand every iteration
      */
     public int demandCapacity = (int) (baseDemandCapacity * baseSupplyCapacity);
+    /*
+     * Panic iterations. If 5, it means that the agent has been panicking for 5 days.
+     * Increased values will depress productivity till it reaches zero.
+     *                  will depress demand till it reaches below baseDemandCapacity, where the agent will be dead.
+     * One non-panic iteration will zero the variable.
+     */
+    public int panicCoefficient = 0;
+    /*
+     * Wealth, initalized by a global variable
+     */
+    public double wealth = GlobalVariables.startingWealth;
 }

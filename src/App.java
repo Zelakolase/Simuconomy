@@ -23,9 +23,7 @@ public class App {
         for(int iteration = 0; iteration < GlobalVariables.iterations; iteration ++) {
             for(Entry<Long, Agent> E : AgentList.entrySet()) {
                 Supply.run(E.getKey(), E.getValue(), Market);
-                // System.out.println(E.getValue().previousPrice); -> Debugging
             }
-            // System.out.println(Market); -> Debugging
         }
     }
 

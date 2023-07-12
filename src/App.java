@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import Environment.GlobalVariables;
 import Libraries.SparkDB;
 import Objects.Agent;
+import Operations.Supply;
 
 /**
  * Main instance
@@ -17,6 +19,14 @@ public class App {
     public static void main(String[] args) throws Exception {
         /* Initialize Economy */
         init();
+        /* The economic cycle */
+        for(int iteration = 0; iteration < GlobalVariables.iterations; iteration ++) {
+            for(Entry<Long, Agent> E : AgentList.entrySet()) {
+                Supply.run(E.getKey(), E.getValue(), Market);
+                // System.out.println(E.getValue().previousPrice); -> Debugging
+            }
+            // System.out.println(Market); -> Debugging
+        }
     }
 
     /**

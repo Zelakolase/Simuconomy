@@ -9,7 +9,7 @@ import Environment.GlobalVariables;
 public class Agent {
     public double previousPrice = GlobalVariables.startingPrice;
     /* The inflation index to previousPrice. If inflator = 1.5, the previousPrice will be inflated by 50% */
-    public double inflator = 1.0;
+    public double inflator = 1.1;
     /* 
      * The base inflator sensitivity is how much does the inflator increases for the first panic iteration.
      * Inflator will be increased by inflatorSensitivity and decreased by 1.0 - inflatorSensitivity.

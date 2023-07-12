@@ -15,4 +15,6 @@ public class GlobalVariables {
     public static int startingBaseSupplyCapacity = 10;
     /* The initalized baseInflatorSensitivity */
     public static double startingBaseInflatorSensitivity = 0.05;
+    /* How many iterations should the economy run */
+    public static int iterations = 1;
 }

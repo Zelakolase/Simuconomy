@@ -23,5 +23,7 @@ public class Supply {
             put("Price", String.valueOf(Agent.previousPrice * Agent.inflator));
             put("AvailableUnits", String.valueOf(Agent.supplyCapacity));
         }});
+        
+        Agent.previousPrice = Agent.previousPrice * Agent.inflator;
     }
 }

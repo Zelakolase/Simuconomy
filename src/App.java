@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Map.Entry;
 
 import Environment.GlobalVariables;
@@ -17,6 +18,8 @@ import Operations.Supply;
  * @author Morad A.
  */
 public class App {
+    /* PRNG */
+    static Random R = new Random();
     /* Market Product Listing */
     static volatile SparkDB Market = new SparkDB();
     /* The list of Agents */
@@ -36,7 +39,7 @@ public class App {
             /* 4. Filter out dead agents */
             Filter.run(AgentList);
             /* 5. Reproduction for the remaining folks */
-            Reproduction.run(AgentList, Market);
+            Reproduction.run(AgentList);
             /* 6. Show statistics */
             Statistics.run(AgentList.values());
         }
@@ -55,10 +58,18 @@ public class App {
 
         /* Initalize the starting Agent List based on GlobalVariables */
         for(long AgentID = 0; AgentID < GlobalVariables.startingPopulation; AgentID ++) {
-            AgentList.put(AgentID, new Agent());
+            Agent A = new Agent();
+            /* Initialize agents with 50% variability (25% below normal and 25% above normal) */
+            A.baseInflatorSensitivity = GlobalVariables.startingBaseInflatorSensitivity * R.nextDouble(0.75, 1.25);
+            A.baseSupplyCapacity = (int) (GlobalVariables.startingBaseSupplyCapacity * R.nextDouble(0.75, 1.25));
+            A.baseDemandCapacity = GlobalVariables.startingBaseDemandCapacity * R.nextDouble(0.75, 1.25);
+            A.demandCapacity = (int) (A.baseDemandCapacity * A.baseSupplyCapacity);
+            A.supplyCapacity = A.baseSupplyCapacity;
+            A.wealth = GlobalVariables.startingPrice * A.supplyCapacity;
+            AgentList.put(AgentID, A);
         }
 
         /* CSV Headers */
-        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply");
+        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population");
     }
 }

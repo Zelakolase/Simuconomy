@@ -28,8 +28,9 @@ public class App {
             for(Entry<Long, Agent> E : AgentList.entrySet()) Supply.run(E.getKey(), E.getValue(), Market);
             /* 2. Demand */
             for(Entry<Long, Agent> E : AgentList.entrySet()) Demand.run(E.getValue(), Market);
-            /* 3. Calculation (and dying process for incompetent agents) */
-            Calculation.run(AgentList, Market);
+            /* 3. Calculation */
+            for(Entry<Long, Agent> E : AgentList.entrySet()) Calculation.run(E, Market);
+            Market.clearRows(); // Clear all offers
             /* 4. Reproduction for the remaining folks */
             Reproduction.run(AgentList, Market);
         }

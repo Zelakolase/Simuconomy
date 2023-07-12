@@ -44,4 +44,8 @@ public class Agent {
      * Wealth, initalized by a global variable
      */
     public double wealth = GlobalVariables.startingWealth;
+    /*
+     * Declare dead?
+     */
+    public boolean isDead = false;
 }

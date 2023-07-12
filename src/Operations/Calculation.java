@@ -1,6 +1,6 @@
 package Operations;
 
-import java.util.HashMap;
+import java.util.Map.Entry;
 
 import Libraries.SparkDB;
 import Objects.Agent;
@@ -17,7 +17,7 @@ public class Calculation {
      * @param Agent Agent Object
      * @param Market Market Table
      */
-    public static void run(HashMap<Long, Agent> AgentList, SparkDB Market) {
-
+    public static void run(Entry<Long, Agent> Agent, SparkDB Market) {
+        
     }
 }

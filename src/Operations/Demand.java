@@ -2,6 +2,7 @@ package Operations;
 
 import java.util.HashMap;
 
+import Environment.GlobalVariables;
 import Libraries.SparkDB;
 import Objects.Agent;
 
@@ -48,10 +49,14 @@ public class Demand {
                 tempAvailableUnits = Agent.demandCapacity < rowAvailableUnits ? Agent.demandCapacity : rowAvailableUnits;
             }
             /* Do the purchase */
+            Agent.isDead = true;
             if(optimalIndex == -1) break; // If there is no optimal offer, break.
             if(tempAvailableUnits < Agent.demandCapacity) Agent.panicCoefficient ++;
             else Agent.panicCoefficient = 0;
+            if(Agent.wealth - (tempPrice * tempAvailableUnits) < GlobalVariables.startingWealth) break;
 
+            /* If the agent found food in market, and his net wealth was not under startingWealth, he is ALIVE */
+            Agent.isDead = false;
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth
             fulfilledDemand += tempAvailableUnits;
 

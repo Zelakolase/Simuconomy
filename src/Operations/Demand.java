@@ -51,6 +51,7 @@ public class Demand {
             Agent.isDead = true; // Agent will be dead if did not find any optimal offer
             if(optimalIndex == -1) break; // If there is no optimal offer, break.
             if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) tempAvailableUnits = (int) (Agent.wealth / tempPrice);
+            else Agent.panicCoefficient --;
 
             Agent.isDead = false;
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth

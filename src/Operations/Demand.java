@@ -2,7 +2,6 @@ package Operations;
 
 import java.util.HashMap;
 
-import Environment.GlobalVariables;
 import Libraries.SparkDB;
 import Objects.Agent;
 
@@ -45,17 +44,14 @@ public class Demand {
 
                 optimalIndex = index;
                 tempPrice = rowPrice;
-                /* Buy my demand or the highest value close to my demand */
+                /* Buy agent's demandCapacity or the highest value closest to agent's demand */
                 tempAvailableUnits = Agent.demandCapacity < rowAvailableUnits ? Agent.demandCapacity : rowAvailableUnits;
             }
             /* Do the purchase */
-            Agent.isDead = true;
+            Agent.isDead = true; // Agent will be dead if did not find any optimal offer or wealth will be lower than zero after purchase
             if(optimalIndex == -1) break; // If there is no optimal offer, break.
-            if(tempAvailableUnits < Agent.demandCapacity) Agent.panicCoefficient ++;
-            else Agent.panicCoefficient = 0;
-            if(Agent.wealth - (tempPrice * tempAvailableUnits) < -GlobalVariables.startingWealth) break;
+            if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) break;
 
-            /* If the agent found food in market, and his net wealth was not under startingWealth, he is ALIVE */
             Agent.isDead = false;
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth
             fulfilledDemand += tempAvailableUnits;
@@ -70,5 +66,8 @@ public class Demand {
             /* Repeat till fulfilling demand or till iterating over the whole market, which is earlier */
             if(fulfilledDemand >= Agent.demandCapacity) break;
         }
+        /* If the fulfilled demand does not meet demand capacity, increase panic, else decrease panic */
+        if(fulfilledDemand < Agent.demandCapacity) Agent.panicCoefficient ++;
+        else Agent.panicCoefficient --;
     }
 }

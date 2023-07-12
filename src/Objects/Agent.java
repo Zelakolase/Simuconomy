@@ -28,11 +28,11 @@ public class Agent {
     /*
      * How many units to produce every iteration
      */
-    public int supplyCapacity = baseSupplyCapacity * 2;
+    public int supplyCapacity;
     /* 
      * How many units to demand every iteration
      */
-    public int demandCapacity = (int) (baseDemandCapacity * baseSupplyCapacity);
+    public int demandCapacity;
     /*
      * Panic iterations. If 5, it means that the agent has been panicking for 5 iterations.
      * Increased values will depress productivity till it reaches zero.

@@ -6,7 +6,7 @@ package Environment;
  */
 public class GlobalVariables {
     /* How many agents to initialize */
-    public static int startingPopulation = 2_500;
+    public static int startingPopulation = 1_000;
     /* The initialized price */
     public static double startingPrice = 5.0;
     /* The initalized baseDemandCapacity */

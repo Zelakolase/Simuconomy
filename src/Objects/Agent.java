@@ -34,10 +34,13 @@ public class Agent {
      */
     public int demandCapacity;
     /*
-     * Panic iterations. If 5, it means that the agent has been panicking for 5 iterations.
-     * Increased values will depress productivity till it reaches zero.
-     *                  will depress demand till it reaches below baseDemandCapacity, where the agent will be dead.
-     * One non-panic iteration will zero the variable.
+     * Panic > 0 will reduce demand, and increase production
+     * Panic < 0 will increase demand, and decrease production
+     * Panic = 0 will randomly choose between >0 or <0
+     * Panic is increased if:
+     *      1. demandCapacity is not fulfilled in 'Demand' stage
+     * Panic is decreased if:
+     *      1. demandCapacity is fulfilled in 'Demand' stage
      */
     public int panicCoefficient = 0;
     /*

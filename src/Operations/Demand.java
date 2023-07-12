@@ -48,9 +48,9 @@ public class Demand {
                 tempAvailableUnits = Agent.demandCapacity < rowAvailableUnits ? Agent.demandCapacity : rowAvailableUnits;
             }
             /* Do the purchase */
-            Agent.isDead = true; // Agent will be dead if did not find any optimal offer or wealth will be lower than zero after purchase
+            Agent.isDead = true; // Agent will be dead if did not find any optimal offer
             if(optimalIndex == -1) break; // If there is no optimal offer, break.
-            if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) break;
+            if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) tempAvailableUnits = (int) (Agent.wealth / tempPrice);
 
             Agent.isDead = false;
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth

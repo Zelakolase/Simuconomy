@@ -11,9 +11,9 @@ import Objects.Agent;
  */
 public class App {
     /* Market Product Listing */
-    static SparkDB Market = new SparkDB();
+    static volatile SparkDB Market = new SparkDB();
     /* The list of Agents */
-    static HashMap<Long, Agent> AgentList = new HashMap<>(); 
+    static volatile HashMap<Long, Agent> AgentList = new HashMap<>(); 
     public static void main(String[] args) throws Exception {
         /* Initialize Economy */
         init();

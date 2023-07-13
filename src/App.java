@@ -21,9 +21,9 @@ public class App {
     /* PRNG */
     static Random R = new Random();
     /* Market Product Listing */
-    static volatile SparkDB Market = new SparkDB();
+    static SparkDB Market = new SparkDB();
     /* The list of Agents */
-    static volatile HashMap<Long, Agent> AgentList = new HashMap<>(); 
+    static HashMap<Long, Agent> AgentList = new HashMap<>(); 
     public static void main(String[] args) throws Exception {
         /* Initialize Economy */
         init();
@@ -39,7 +39,7 @@ public class App {
             /* 4. Filter out dead agents */
             Filter.run(AgentList);
             /* 5. Reproduction for the remaining folks */
-            Reproduction.run(AgentList);
+            if(iteration > 5) Reproduction.run(AgentList);
             /* 6. Show statistics */
             Statistics.run(AgentList.values());
         }

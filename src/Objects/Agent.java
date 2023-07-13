@@ -61,4 +61,8 @@ public class Agent {
      * How many children does the agent have
      */
     public int children = 0;
+    /*
+     * Age of the Agent, if he is old, he will die
+     */
+    public int age = 0;
 }

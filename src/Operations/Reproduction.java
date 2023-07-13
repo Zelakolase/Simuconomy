@@ -20,9 +20,11 @@ public class Reproduction {
             Agent firstAgent = agentList.get(index);
             Agent secondAgent = agentList.get(index + 1);
 
-            /* If the first and second agent have 2-4 children already, break iteration */
-            int maxChildren = R.nextInt(2, 5);
+            /* If the first and second agent have 2 children already, break iteration */
+            int maxChildren = R.nextInt(2,4);
             if(firstAgent.children >= maxChildren || secondAgent.children >= maxChildren) continue;
+            /* If the parents are not overshooting/undershooting much (aka. good genes), they are eligible for sex */
+            if(Math.abs(firstAgent.panicCoefficient) > 5 && Math.abs(secondAgent.panicCoefficient) > 5) continue;
 
             firstAgent.children ++;
             secondAgent.children ++;
@@ -34,24 +36,26 @@ public class Reproduction {
             /* Choose non-occupied ID for Offspring, 
              * such that it would be within reasonable integer range
              */
-            for(int offspringID = 0; offspringID <= AgentList.keySet().size(); offspringID++) {
+            for(long offspringID = 0; offspringID <= AgentList.keySet().size() * 2; offspringID++) {
                 if(! AgentList.keySet().contains(offspringID)) {
                     offSpringID = offspringID;
                     break;
                 }
             }
 
-            /* Mix genetic traits for the parent agents with up-to-25% variation */
+            /* Mix genetic traits for the parent agents with up-to-50% variation */
             offSpring.baseDemandCapacity = (firstAgent.baseDemandCapacity + secondAgent.baseDemandCapacity) / 2.0;
-            offSpring.baseDemandCapacity *= R.nextDouble(0.75, 1.25);
+            offSpring.baseDemandCapacity *= R.nextDouble(0.5, 1.5);
 
             offSpring.baseSupplyCapacity = (firstAgent.baseSupplyCapacity + secondAgent.baseSupplyCapacity) / 2;
-            offSpring.baseSupplyCapacity *= R.nextDouble(0.75, 1.25);
+            offSpring.baseSupplyCapacity *= R.nextDouble(0.5, 1.5);
+            if(offSpring.baseDemandCapacity <= 0) offSpring.baseDemandCapacity = GlobalVariables.startingBaseDemandCapacity;
+            if(offSpring.baseSupplyCapacity <= 0) offSpring.baseSupplyCapacity = GlobalVariables.startingBaseSupplyCapacity;
             
             offSpring.demandCapacity = (int) (offSpring.baseDemandCapacity * offSpring.baseSupplyCapacity);
 
             offSpring.baseInflatorSensitivity = (firstAgent.baseInflatorSensitivity + secondAgent.baseInflatorSensitivity) / 2.0;
-            offSpring.baseInflatorSensitivity *= R.nextDouble(0.75, 1.25);
+            offSpring.baseInflatorSensitivity *= R.nextDouble(0.5, 1.5);
 
             offSpring.supplyCapacity = offSpring.baseSupplyCapacity;
 

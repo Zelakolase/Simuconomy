@@ -6,7 +6,11 @@ import java.util.concurrent.Semaphore;
 import Libraries.SparkDB;
 import Objects.Agent;
 
-public class RunnableWrappers {
+/**
+ * Runnable Wrappers for economy operations
+ * @author Morad A.
+ */
+public class RW {
     /* Initialize taskStates Boolean List */
     public static volatile ArrayList<Boolean> taskStates = new ArrayList<>();
     /* Initialize Semaphore for Maximum thread execution */
@@ -61,6 +65,6 @@ public class RunnableWrappers {
      * Loop indifinitely until all tasks are finished
      */
     public static void waitTasks() {
-        while(! RunnableWrappers.taskFinished()) {}
+        while(! RW.taskFinished()) {}
     }
 }

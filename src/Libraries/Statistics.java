@@ -18,22 +18,33 @@ public class Statistics {
      * @param Market Market Object
      */
     public static void run(Collection<Agent> AgentList) {
-        long GDPInUnits = 0; double AveragePanicCoefficient = 0.0; double AverageDemand = 0.0;
-        double AverageSupply = 0.0; ArrayList<Double> Wealths = new ArrayList<>();
+        long GDPInUnits = 0; double AveragePanicCoefficient = 0; double AverageDemand = 0;
+        double AverageSupply = 0; ArrayList<Double> Wealths = new ArrayList<>();
+
+        ArrayList<Integer> AS = new ArrayList<>();
+        ArrayList<Integer> APC = new ArrayList<>();
+        ArrayList<Integer> AD = new ArrayList<>();
         for(Agent A : AgentList) {
             GDPInUnits += A.supplyCapacity;
-            AveragePanicCoefficient += A.panicCoefficient;
-            AverageDemand += A.demandCapacity;
-            AverageSupply += A.supplyCapacity;
+            APC.add(A.panicCoefficient);
+            AD.add(A.demandCapacity);
+            AS.add(A.supplyCapacity);
             Wealths.add(A.wealth);
         }
 
-        AveragePanicCoefficient /= AgentList.size();
-        AverageDemand /= AgentList.size();
-        AverageSupply /= AgentList.size();
+        AveragePanicCoefficient = arithmeticMean(convertToNumberList(APC));
+        AverageDemand = arithmeticMean(convertToNumberList(AD));
+        AverageSupply = arithmeticMean(convertToNumberList(AS));
 
-        double arithmeticMeanWealths = arithmeticMean(Wealths);
+        double arithmeticMeanWealths = arithmeticMean(convertToNumberList(Wealths));
         double CoefficientOfVariationWealth = standardDeviation(Wealths, arithmeticMeanWealths) / arithmeticMeanWealths;
+
+        /* Handle NaN */
+        if(AveragePanicCoefficient != AveragePanicCoefficient) AveragePanicCoefficient = 0;
+        if(AverageDemand != AverageDemand) AverageDemand = 0;
+        if(AverageSupply != AverageSupply) AverageSupply = 0;
+        if(arithmeticMeanWealths != arithmeticMeanWealths) arithmeticMeanWealths = 0;
+        if(CoefficientOfVariationWealth != CoefficientOfVariationWealth) CoefficientOfVariationWealth = 0;
 
         System.out.println(GDPInUnits+","+CoefficientOfVariationWealth+","+AveragePanicCoefficient+","+AverageDemand+","+AverageSupply+","+AgentList.size());
     }
@@ -53,9 +64,20 @@ public class Statistics {
      * @param in The input arraylist
      * @return the arithmetic mean for all elements in the input arraylist
      */
-    private static double arithmeticMean(ArrayList<Double> in) {
+    private static double arithmeticMean(ArrayList<Number> in) {
         double sum = 0;
-        for(Double number : in) sum += Math.abs(number);
+        for(Number number : in) sum += number.doubleValue();
         return sum / in.size();
+    }
+
+    /**
+     * Converts the Double/Integer/.. list to Number list
+     * @param list The input List to be converted
+     * @return The resultant ArrayList<Number>
+     */
+    private static ArrayList<Number> convertToNumberList(ArrayList<? extends Number> list) {
+        ArrayList<Number> numberList = new ArrayList<>();
+        numberList.addAll(list);
+        return numberList;
     }
 }

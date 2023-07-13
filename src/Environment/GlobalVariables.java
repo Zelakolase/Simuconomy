@@ -17,4 +17,6 @@ public class GlobalVariables {
     public static double startingBaseInflatorSensitivity = 0.1;
     /* How many iterations should the economy run */
     public static int iterations = 500;
+    /* Population Hard Limit, the population NEVER goes beyons populationLimit */
+    public static int populationLimit = 1500;
 }

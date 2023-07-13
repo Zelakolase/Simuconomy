@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Map.Entry;
 
+import Environment.GlobalVariables;
 import Objects.Agent;
 
 /**
@@ -17,7 +18,7 @@ public class Filter {
         replicaAgentList.putAll(AgentList);
         for(Entry<Long, Agent> E : replicaAgentList.entrySet()) {
             E.getValue().age ++;
-            if(E.getValue().isDead || E.getValue().age > 1500 / AgentList.size()) AgentList.remove(E.getKey());
+            if(E.getValue().isDead || E.getValue().age > GlobalVariables.populationLimit / AgentList.size()) AgentList.remove(E.getKey());
         }
     }
 }

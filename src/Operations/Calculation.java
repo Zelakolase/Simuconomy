@@ -25,6 +25,8 @@ public class Calculation {
         if(Agent.getValue().isDead) return 1;
         /* If the agent is bankrupt (wealth <= 0), increase panic */
         if(Agent.getValue().wealth <= 0) Agent.getValue().panicCoefficient ++;
+        /* The agent is dead if he has more than 10,000 dollars in debt */
+        if(Agent.getValue().wealth <= -10_000) Agent.getValue().isDead = true;
         /* Get Offer Information */
         int remainingUnits = Integer.parseInt(Market.get(new HashMap<>() {{
             put("ProducerID", String.valueOf(Agent.getKey()));
@@ -49,14 +51,8 @@ public class Calculation {
             boolean choose = R.nextBoolean();
             if(choose) Agent.getValue().inflator += Agent.getValue().baseInflatorSensitivity;
             Agent.getValue().panicCoefficient ++;
-            /* Variate baseInflatorSensitivity between -15% and 15% */
-            Agent.getValue().baseInflatorSensitivity *= R.nextDouble(0.85, 1.15);
-        }
-
-        /* If panicCoefficient is zero (neutral), choose a situation randomly */
-        if(Agent.getValue().panicCoefficient == 0) {
-            if(R.nextBoolean()) Agent.getValue().panicCoefficient = -1;
-            else Agent.getValue().panicCoefficient = 1;
+            /* Variate baseInflatorSensitivity between -5% and 5% */
+            Agent.getValue().baseInflatorSensitivity *= R.nextDouble(0.95, 1.05);
         }
 
         /* Measure the absolute PanicCoefficient */
@@ -64,26 +60,26 @@ public class Calculation {
         /*
          * If PC > 0, increase supply by a percentage of baseSupplyCapacity
          * If PC < 0, decrease supply by a percentage of baseSupplyCapacity
-         * Example: if PC = 10, supplyCapacity will be increased by 2*baseSupplyCapacity
-         * Example: if PC = -3.5, supplyCapacity will be decreased by 0.7*baseSupplyCapacity
+         * Example: if PC = 10, supplyCapacity will be increased by baseSupplyCapacity
+         * Example: if PC = -3.5, supplyCapacity will be decreased by 0.35*baseSupplyCapacity
          */
-        if(Agent.getValue().panicCoefficient < 0) Agent.getValue().supplyCapacity -= ((absPC / 5.0) * Agent.getValue().baseSupplyCapacity);
-        if(Agent.getValue().panicCoefficient > 0) Agent.getValue().supplyCapacity += ((absPC / 5.0) * Agent.getValue().baseSupplyCapacity);
+        if(Agent.getValue().panicCoefficient < 0) Agent.getValue().supplyCapacity -= ((absPC / 10.0) * Agent.getValue().baseSupplyCapacity);
+        if(Agent.getValue().panicCoefficient > 0) Agent.getValue().supplyCapacity += ((absPC / 10.0) * Agent.getValue().baseSupplyCapacity);
 
         /*
          * If PC > 0, decrease demand by a percentage of baseDemandCapacity*supplyCapacity
          * If PC < 0, increase demand by a percentage of baseDemandCapacity*supplyCapacity
-         * Example: if PC = 10, demandCapacity will be decreased by 2*baseDemandCapacity*supplyCapacity
-         * Example: if PC = -3.5, demandCapacity will be increased by 0.7*baseDemandCapacity*supplyCapacity
+         * Example: if PC = 10, demandCapacity will be decreased by baseDemandCapacity*supplyCapacity
+         * Example: if PC = -3.5, demandCapacity will be increased by 0.35*baseDemandCapacity*supplyCapacity
          */
-        if(Agent.getValue().panicCoefficient > 0) Agent.getValue().demandCapacity -= ((absPC / 5.0) * Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
-        if(Agent.getValue().panicCoefficient < 0) Agent.getValue().demandCapacity += ((absPC / 5.0) * Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
+        if(Agent.getValue().panicCoefficient > 0) Agent.getValue().demandCapacity -= ((absPC / 10.0) * Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
+        if(Agent.getValue().panicCoefficient < 0) Agent.getValue().demandCapacity += ((absPC / 10.0) * Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
 
         /*
          * If supplyCapacity falls below zero, reset it to be baseSupplyCapacity
          * Increase Panic
          */
-        if(Agent.getValue().supplyCapacity < 0) { 
+        if(Agent.getValue().supplyCapacity <= 0) { 
             Agent.getValue().supplyCapacity = Agent.getValue().baseSupplyCapacity;
             Agent.getValue().panicCoefficient ++;
         }
@@ -92,10 +88,15 @@ public class Calculation {
          * If demandCapacity falls below zero, reset it to be baseDemandCapacity*supplyCapacity
          * Decrease Panic
          */
-        if(Agent.getValue().demandCapacity < 0) {
+        if(Agent.getValue().demandCapacity <= 0) {
             Agent.getValue().demandCapacity = (int) (Agent.getValue().baseDemandCapacity * Agent.getValue().supplyCapacity);
             Agent.getValue().panicCoefficient --;
         }
+
+        /*
+         * If baseInflatorSensitivity is higher than Inflator, increase panic
+         */
+        if(Agent.getValue().baseInflatorSensitivity > Agent.getValue().inflator) Agent.getValue().panicCoefficient ++;
 
         return 0;
     }

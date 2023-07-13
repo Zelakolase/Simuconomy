@@ -70,6 +70,6 @@ public class App {
         }
 
         /* CSV Headers */
-        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population");
+        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population,AverageWealth,gene-baseInflatorSensitivity,gene-baseSupplyCapacity,gene-baseDemandCapacity");
     }
 }

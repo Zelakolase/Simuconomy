@@ -24,17 +24,26 @@ public class Statistics {
         ArrayList<Integer> AS = new ArrayList<>();
         ArrayList<Integer> APC = new ArrayList<>();
         ArrayList<Integer> AD = new ArrayList<>();
+        ArrayList<Double> AbIS = new ArrayList<>(); // Average baseInflatorSensitivity
+        ArrayList<Integer> AbSC = new ArrayList<>(); // Average baseSupplyCapacity
+        ArrayList<Double> AbDC = new ArrayList<>(); // Average baseDemandCapacity
         for(Agent A : AgentList) {
             GDPInUnits += A.supplyCapacity;
             APC.add(A.panicCoefficient);
             AD.add(A.demandCapacity);
             AS.add(A.supplyCapacity);
             Wealths.add(A.wealth);
+            AbIS.add(A.baseInflatorSensitivity);
+            AbDC.add(A.baseDemandCapacity);
+            AbSC.add(A.baseSupplyCapacity);
         }
 
         AveragePanicCoefficient = arithmeticMean(convertToNumberList(APC));
         AverageDemand = arithmeticMean(convertToNumberList(AD));
         AverageSupply = arithmeticMean(convertToNumberList(AS));
+        double AveragebaseDemandCapacity = arithmeticMean(convertToNumberList(AbDC));
+        double AveragebaseSupplyCapacity = arithmeticMean(convertToNumberList(AbSC));
+        double AveragebaseInflatorSensitivity = arithmeticMean(convertToNumberList(AbIS));
 
         double arithmeticMeanWealths = arithmeticMean(convertToNumberList(Wealths));
         double CoefficientOfVariationWealth = standardDeviation(Wealths, arithmeticMeanWealths) / arithmeticMeanWealths;
@@ -45,8 +54,22 @@ public class Statistics {
         if(AverageSupply != AverageSupply) AverageSupply = 0;
         if(arithmeticMeanWealths != arithmeticMeanWealths) arithmeticMeanWealths = 0;
         if(CoefficientOfVariationWealth != CoefficientOfVariationWealth) CoefficientOfVariationWealth = 0;
+        if(AveragebaseInflatorSensitivity != AveragebaseInflatorSensitivity) AveragebaseInflatorSensitivity = 0;
+        if(AveragebaseSupplyCapacity != AveragebaseSupplyCapacity) AveragebaseSupplyCapacity = 0;
+        if(AveragebaseDemandCapacity != AveragebaseDemandCapacity) AveragebaseDemandCapacity = 0;
 
-        System.out.println(GDPInUnits+","+CoefficientOfVariationWealth+","+AveragePanicCoefficient+","+AverageDemand+","+AverageSupply+","+AgentList.size());
+        StringBuilder sb = new StringBuilder();
+        sb.append(GDPInUnits).append(",")
+                .append(CoefficientOfVariationWealth).append(",")
+                .append(AveragePanicCoefficient).append(",")
+                .append(AverageDemand).append(",")
+                .append(AverageSupply).append(",")
+                .append(AgentList.size()).append(",")
+                .append(arithmeticMeanWealths).append(",")
+                .append(AveragebaseInflatorSensitivity).append(",")
+                .append(AveragebaseSupplyCapacity).append(",")
+                .append(AveragebaseDemandCapacity);
+        System.out.println(sb.toString());
     }
 
     private static double standardDeviation(ArrayList<Double> in, double arithmeticMean) {

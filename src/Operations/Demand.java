@@ -19,7 +19,7 @@ public class Demand {
     public static void run(Agent Agent, SparkDB Market) {
         int fulfilledDemand = 0; // Used to check if we fulfilled the agent demand
         int attempts = 0; // Did we finish demand?
-        while(attempts < Market.num_queries) {
+        while(attempts < Market.num_queries) { // Maximum iterations is the number of queries
             /* 1. Get optimal offer index */
             int optimalIndex = -1;
 
@@ -48,12 +48,14 @@ public class Demand {
                 tempAvailableUnits = Agent.demandCapacity < rowAvailableUnits ? Agent.demandCapacity : rowAvailableUnits;
             }
             /* Do the purchase */
-            Agent.isDead = true; // Agent will be dead if did not find any optimal offer
-            if(optimalIndex == -1) break; // If there is no optimal offer, break.
+            if(optimalIndex == -1) {
+                Agent.isDead = true;
+                break;
+             } // If there is no optimal offer, break.
+
             if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) tempAvailableUnits = (int) (Agent.wealth / tempPrice);
             else Agent.panicCoefficient --;
 
-            Agent.isDead = false;
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth
             fulfilledDemand += tempAvailableUnits;
 
@@ -66,6 +68,7 @@ public class Demand {
 
             /* Repeat till fulfilling demand or till iterating over the whole market, which is earlier */
             if(fulfilledDemand >= Agent.demandCapacity) break;
+            attempts++;
         }
         /* If the fulfilled demand does not meet demand capacity, increase panic, else decrease panic */
         if(fulfilledDemand < Agent.demandCapacity) Agent.panicCoefficient ++;

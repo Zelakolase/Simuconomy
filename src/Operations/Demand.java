@@ -54,6 +54,7 @@ public class Demand {
              } // If there is no optimal offer, break.
 
             if(Agent.wealth - (tempPrice * tempAvailableUnits) < 0) tempAvailableUnits = (int) (Agent.wealth / tempPrice);
+            else Agent.panicCoefficient --;
 
             Agent.wealth = Agent.wealth - (tempPrice * tempAvailableUnits); // Update wealth
             fulfilledDemand += tempAvailableUnits;

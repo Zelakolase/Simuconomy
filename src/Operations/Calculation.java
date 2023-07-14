@@ -24,7 +24,7 @@ public class Calculation {
         /* If the agent is dead from Demand stage, do not process him */
         if(Agent.getValue().isDead) return 1;
         /* If the agent is bankrupt (wealth <= 0), increase panic */
-        if(Agent.getValue().wealth <= 0) Agent.getValue().panicCoefficient += 3;
+        if(Agent.getValue().wealth <= 0) Agent.getValue().panicCoefficient ++;
         /* The agent is dead if he has more than 10,000 dollars in debt */
         if(Agent.getValue().wealth <= -10_000) Agent.getValue().isDead = true;
         /* Get Offer Information */

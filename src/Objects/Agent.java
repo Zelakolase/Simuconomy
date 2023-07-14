@@ -45,6 +45,7 @@ public class Agent {
      *      1. demandCapacity is fulfilled in 'Demand' stage
      *      2. not all products are sold
      *      3. demandCapacity falls below zero
+     *      4. wealth is sufficient for demand
      */
     public int panicCoefficient = 0;
     /*

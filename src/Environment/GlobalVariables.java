@@ -6,7 +6,7 @@ package Environment;
  */
 public class GlobalVariables {
     /* How many agents to initialize */
-    public static int startingPopulation = 200;
+    public static int startingPopulation = 100;
     /* The initalized baseDemandCapacity */
     public static double startingBaseDemandCapacity = 1.0;
     /* The initalized baseSupplyCapacity */
@@ -18,7 +18,7 @@ public class GlobalVariables {
     /* How many iterations should the economy run */
     public static int iterations = 1051;
     /* Population Hard Limit, the population NEVER goes beyond populationLimit */
-    public static int populationLimit = 1000;
+    public static int populationLimit = 500;
     /* Inflation target, the system will try to impose taxation/UBI to reach that level */
     public static double inflationTarget = 0;
     /* Offspring variation percentage */

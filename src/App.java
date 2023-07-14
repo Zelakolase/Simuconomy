@@ -39,7 +39,7 @@ public class App {
             /* 4. Filter out dead agents */
             Filter.run(AgentList);
             /* 5. Reproduction for the remaining folks after initial calibration */
-            if(iteration > 10) Reproduction.run(AgentList);
+            if(iteration > 5) Reproduction.run(AgentList);
             /* 6. Show statistics after initial calibration */
             if(iteration > 10) Statistics.run(AgentList.values());
         }

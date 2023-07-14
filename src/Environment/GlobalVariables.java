@@ -6,17 +6,19 @@ package Environment;
  */
 public class GlobalVariables {
     /* How many agents to initialize */
-    public static int startingPopulation = 500;
-    /* The initialized price */
-    public static double startingPrice = 5.0;
+    public static int startingPopulation = 200;
     /* The initalized baseDemandCapacity */
     public static double startingBaseDemandCapacity = 1.0;
     /* The initalized baseSupplyCapacity */
     public static int startingBaseSupplyCapacity = 10;
+    /* The initialized price */
+    public static double startingPrice = 2;
     /* The initalized baseInflatorSensitivity */
-    public static double startingBaseInflatorSensitivity = 0.1;
+    public static double startingBaseInflatorSensitivity = 0.15;
     /* How many iterations should the economy run */
-    public static int iterations = 500;
-    /* Population Hard Limit, the population NEVER goes beyons populationLimit */
-    public static int populationLimit = 1500;
+    public static int iterations = 1051;
+    /* Population Hard Limit, the population NEVER goes beyond populationLimit */
+    public static int populationLimit = 1000;
+    /* Inflation target, the system will try to impose taxation/UBI to reach that level */
+    public static double inflationTarget = 0;
 }

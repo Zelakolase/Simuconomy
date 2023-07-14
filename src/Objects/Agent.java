@@ -34,9 +34,8 @@ public class Agent {
      */
     public int demandCapacity;
     /*
-     * Panic > 0 will reduce demand, and increase production
+     * Panic >= 0 will reduce demand, and increase production
      * Panic < 0 will increase demand, and decrease production
-     * Panic = 0 will randomly choose between >0 or <0
      * Panic is increased if:
      *      1. demandCapacity is not fulfilled in 'Demand' stage
      *      2. wealth has reached zero or below zero

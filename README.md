@@ -6,7 +6,7 @@ Simuconomy is a simple economic model that uses genetic variation and the econom
 - Environment/
     - GlobalVariables.java : The global configuration of the economy (inflation target, starting population, etc..).
 - Libraries/
-    - SparkDB.java : in-memory table object for free-market offers. (Original Project)[https://github.com/NaDeSys/SparkDB].
+    - SparkDB.java : in-memory table object for free-market offers. [Original Project](https://github.com/NaDeSys/SparkDB).
     - Statistics.java : Generates one CSV line, containing Wealth Coefficient of variation, Mean Panic Coefficient, Mean Demand per agent, Mean Supply per agent, Number of agents alive, Mean Wealth per agent, Mean Base Inflator Sensitivity (gene), Mean Base Supply Capacity (gene), Mean Base Demand Capacity (gene), Inflation rate (%).
 - Objects/
     - Agent.java : Agent Object, with multiple individual properties (including genes).

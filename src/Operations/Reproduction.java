@@ -43,23 +43,26 @@ public class Reproduction {
                 }
             }
 
-            /* Mix genetic traits for the parent agents with up-to-50% variation */
+            /* Mix genetic traits for the parent agents with up-to-25% variation */
             offSpring.baseDemandCapacity = (firstAgent.baseDemandCapacity + secondAgent.baseDemandCapacity) / 2.0;
-            offSpring.baseDemandCapacity *= R.nextDouble(0.5, 1.5);
+            offSpring.baseDemandCapacity *= R.nextDouble(1.0 - GlobalVariables.offspringVariation, 1.0 + GlobalVariables.offspringVariation);
 
             offSpring.baseSupplyCapacity = (firstAgent.baseSupplyCapacity + secondAgent.baseSupplyCapacity) / 2;
-            offSpring.baseSupplyCapacity *= R.nextDouble(0.5, 1.5);
+            offSpring.baseSupplyCapacity *= R.nextDouble(1.0 - GlobalVariables.offspringVariation, 1.0 + GlobalVariables.offspringVariation);
             if(offSpring.baseDemandCapacity <= 0) offSpring.baseDemandCapacity = GlobalVariables.startingBaseDemandCapacity;
             if(offSpring.baseSupplyCapacity <= 0) offSpring.baseSupplyCapacity = GlobalVariables.startingBaseSupplyCapacity;
             
             offSpring.demandCapacity = (int) (offSpring.baseDemandCapacity * offSpring.baseSupplyCapacity);
 
             offSpring.baseInflatorSensitivity = (firstAgent.baseInflatorSensitivity + secondAgent.baseInflatorSensitivity) / 2.0;
-            offSpring.baseInflatorSensitivity *= R.nextDouble(0.5, 1.5);
+            offSpring.baseInflatorSensitivity *= R.nextDouble(1.0 - GlobalVariables.offspringVariation, 1.0 + GlobalVariables.offspringVariation);
 
             offSpring.supplyCapacity = offSpring.baseSupplyCapacity;
 
-            offSpring.wealth = GlobalVariables.startingPrice * offSpring.supplyCapacity * 5;
+            offSpring.wealth = 0.35 * firstAgent.wealth;
+            offSpring.wealth += 0.35 * secondAgent.wealth;
+            firstAgent.wealth *= 0.65;
+            secondAgent.wealth *= 0.65;
 
             /* Insert to AgentList */
             AgentList.put(offSpringID, offSpring);

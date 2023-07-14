@@ -21,4 +21,6 @@ public class GlobalVariables {
     public static int populationLimit = 1000;
     /* Inflation target, the system will try to impose taxation/UBI to reach that level */
     public static double inflationTarget = 0;
+    /* Offspring variation percentage */
+    public static double offspringVariation = 0.25;
 }

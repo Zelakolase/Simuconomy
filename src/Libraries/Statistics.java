@@ -1,9 +1,12 @@
 package Libraries;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
+import Environment.GlobalVariables;
 import Objects.Agent;
+import Operations.inflationControl;
 
 /**
  * This class exports statistics from agents and the market, then make a comma-delimited list and print
@@ -27,6 +30,12 @@ public class Statistics {
         ArrayList<Double> AbIS = new ArrayList<>(); // Average baseInflatorSensitivity
         ArrayList<Integer> AbSC = new ArrayList<>(); // Average baseSupplyCapacity
         ArrayList<Double> AbDC = new ArrayList<>(); // Average baseDemandCapacity
+        ArrayList<Double> inflators = new ArrayList<>();
+
+        /* Variables for Inflation control */
+        double totalWealth = 0;
+        double medianInflator = 0d;
+
         for(Agent A : AgentList) {
             GDPInUnits += A.supplyCapacity;
             APC.add(A.panicCoefficient);
@@ -36,7 +45,11 @@ public class Statistics {
             AbIS.add(A.baseInflatorSensitivity);
             AbDC.add(A.baseDemandCapacity);
             AbSC.add(A.baseSupplyCapacity);
+            totalWealth += A.wealth;
+            inflators.add(A.inflator);
         }
+
+        medianInflator = Median(convertToNumberList(inflators));
 
         AveragePanicCoefficient = arithmeticMean(convertToNumberList(APC));
         AverageDemand = arithmeticMean(convertToNumberList(AD));
@@ -68,8 +81,12 @@ public class Statistics {
                 .append(arithmeticMeanWealths).append(",")
                 .append(AveragebaseInflatorSensitivity).append(",")
                 .append(AveragebaseSupplyCapacity).append(",")
-                .append(AveragebaseDemandCapacity);
+                .append(AveragebaseDemandCapacity).append(",")
+                .append((medianInflator-1)*100.0).append("%");
         System.out.println(sb.toString());
+
+        /* Inflation control */
+        if(! (medianInflator-1 == GlobalVariables.inflationTarget)) inflationControl.run(AgentList, medianInflator-1, totalWealth);
     }
 
     private static double standardDeviation(ArrayList<Double> in, double arithmeticMean) {
@@ -83,7 +100,7 @@ public class Statistics {
     }
 
     /**
-     * Calculation of the arithmetic mean for a double arraylist
+     * Calculation of the arithmetic mean for a number arraylist
      * @param in The input arraylist
      * @return the arithmetic mean for all elements in the input arraylist
      */
@@ -91,6 +108,31 @@ public class Statistics {
         double sum = 0;
         for(Number number : in) sum += number.doubleValue();
         return sum / in.size();
+    }
+
+    /**
+     * Calculation of the median for a number arraylist
+     * @param in The input arraylist
+     * @return the median for all elements in the input arraylist
+     */
+    public static double Median(ArrayList<Number> in) {
+        try{
+        int size = in.size();
+        double[] arr = new double[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = in.get(i).doubleValue();
+        }
+        Arrays.sort(arr);
+        if (size % 2 == 0) {
+            int mid = size / 2;
+            return (arr[mid - 1] + arr[mid]) / 2;
+        } else {
+            int mid = size / 2;
+            return arr[mid];
+        }
+    }catch(Exception e) {
+    }
+    return 0;
     }
 
     /**

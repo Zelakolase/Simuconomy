@@ -19,7 +19,7 @@ public class Demand {
     public static void run(Agent Agent, SparkDB Market) {
         int fulfilledDemand = 0; // Used to check if we fulfilled the agent demand
         int attempts = 0; // Did we finish demand?
-        while(attempts < Market.num_queries) { // Maximum iterations is the number of queries
+        while(attempts < 5) { // Maximum buy operations are 5 different offers
             /* 1. Get optimal offer index */
             int optimalIndex = -1;
 

@@ -49,8 +49,8 @@ public class Calculation {
             boolean choose = R.nextBoolean();
             if(choose) Agent.getValue().inflator += Agent.getValue().baseInflatorSensitivity;
             Agent.getValue().panicCoefficient ++;
-            /* Variate baseInflatorSensitivity between -5% and 5% */
-            Agent.getValue().baseInflatorSensitivity *= R.nextDouble(0.95, 1.05);
+            /* Variate baseInflatorSensitivity between -1% and 1% */
+            Agent.getValue().baseInflatorSensitivity *= R.nextDouble(0.99, 1.01);
         }
 
         /* Measure the absolute PanicCoefficient */

@@ -38,10 +38,10 @@ public class App {
             Market.clearRows(); // Clear all offers
             /* 4. Filter out dead agents */
             Filter.run(AgentList);
-            /* 5. Reproduction for the remaining folks */
-            if(iteration > 5) Reproduction.run(AgentList);
-            /* 6. Show statistics */
-            Statistics.run(AgentList.values());
+            /* 5. Reproduction for the remaining folks after initial calibration */
+            if(iteration > 10) Reproduction.run(AgentList);
+            /* 6. Show statistics after initial calibration */
+            if(iteration > 10) Statistics.run(AgentList.values());
         }
     }
 
@@ -70,6 +70,6 @@ public class App {
         }
 
         /* CSV Headers */
-        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population,AverageWealth,gene-baseInflatorSensitivity,gene-baseSupplyCapacity,gene-baseDemandCapacity");
+        System.out.println("GDPInUnits,CoefficientOfVariationWealth,AveragePanicCoefficient,AverageDemand,AverageSupply,Population,AverageWealth,gene-baseInflatorSensitivity,gene-baseSupplyCapacity,gene-baseDemandCapacity,medianInflationRate");
     }
 }

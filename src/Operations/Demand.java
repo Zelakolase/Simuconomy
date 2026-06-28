@@ -8,7 +8,7 @@ import Objects.Agent;
 /**
  * This class represents the agents demanding products
  * Second stage
- * @author GILL A.
+ * @author REDACTED A.
  */
 public class Demand {
     /**

@@ -9,7 +9,7 @@ import Objects.Agent;
 
 /**
  * This class represents the phase where we filter out dead agents from the system
- * @author GILL A.
+ * @author REDACTED A.
  */
 public class Filter {
     static Random R = new Random();

@@ -10,7 +10,7 @@ import Objects.Agent;
 /**
  * This class represents the agents calculating their values
  * Third Stage
- * @author GILL A.
+ * @author REDACTED A.
  */
 public class Calculation {
     public static Random R = new Random();

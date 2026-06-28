@@ -9,7 +9,7 @@ import Objects.Agent;
 
 /**
  * This class represents the process where every 2 agents have sex and get pregnant for 2 to 3 times
- * @author Morad A.
+ * @author GILL A.
  */
 public class Reproduction {
     public static Random R = new Random();

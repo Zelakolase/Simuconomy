@@ -15,7 +15,7 @@ import Operations.Supply;
 
 /**
  * Main instance
- * @author Morad A.
+ * @author GILL A.
  */
 public class App {
     /* PRNG */

@@ -10,7 +10,7 @@ import Operations.inflationControl;
 
 /**
  * This class exports statistics from agents and the market, then make a comma-delimited list and print
- * @author Morad A.
+ * @author GILL A.
  */
 public class Statistics {
     /**

@@ -6,7 +6,7 @@ import Objects.Agent;
 
 /**
  * This class represents the operation where we use UBIs to control deflation, and tax to control inflation
- * @author Morad A.
+ * @author GILL A.
  */
 public class inflationControl {
     

@@ -8,7 +8,7 @@ import Objects.Agent;
 /**
  * This class represents the agents putting their supply on market
  * First Stage
- * @author Morad A.
+ * @author GILL A.
  */
 public class Supply {
     /**

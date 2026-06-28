@@ -4,7 +4,7 @@ import Environment.GlobalVariables;
 
 /**
  * Every agent is an object
- * @author Morad A.
+ * @author GILL A.
  */
 public class Agent {
     public double previousPrice = GlobalVariables.startingPrice;
